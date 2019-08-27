@@ -1,0 +1,15 @@
+<html>
+
+<head>
+	<script type="text/javascript">
+		document.addEventListener("DOMContentLoaded",() =>{
+			navigator.usb.requestDevice({ filters: [{ vendorId: 1921 }] })
+			.then(device => {
+				console.log(device);
+			})
+			.catch(error => { console.log(error); });
+		})
+	</script>
+</head>
+
+</html>

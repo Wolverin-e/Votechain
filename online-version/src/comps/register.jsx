@@ -1,0 +1,76 @@
+import React, { Component } from "react";
+import DB from '../DB/db';
+var crypto = require("crypto-js");
+
+class Register extends Component {
+
+	constructor(){
+		super();
+		this.state = {
+			aid: '', 
+			name: '', 
+			email: '', 
+			number: '', 
+			deviceID: '', 
+			pin: '',
+			device: false
+		}
+	}
+
+	handleChange = (field, evt) => {
+		this.setState({ [field]: evt.target.value });
+		// console.log(this.state)
+
+	};
+
+	handleSigner = (evt) => {
+		var elem = evt.target;
+		if(! this.state.device) {
+			navigator.usb.requestDevice({ filters: [] }).then(device => {
+				this.setState({deviceID: device.productId+''+device.vendorId, device:true});
+				// console.log(this.state);
+				elem.value = "CONNECTED!";
+			});
+		} else {
+			elem.value = "PLEASE MOVE FORWARD!";
+		}
+	};
+
+	handleSubmit =async () => {
+		const device = this.state.deviceID;
+		const pin = this.state.pin;
+		await this.setState({deviceID: crypto.AES.encrypt(device, pin).toString()});
+		console.log(this.state.deviceID);
+		var sql = "INSERT INTO voters (aid, name, email, number, vhash, dhash) VALUES ("+this.state.aid+", '"+this.state.name+"', '"+this.state.email+"', "+this.state.number+', '+"'', '"+this.state.deviceID+"')";
+		console.log(sql);
+		var validation_sql = "SELECT aid FROM voters WHERE aid="+this.state.aid;
+		DB(validation_sql).then(res => {
+			if(!res.qry_res.length) {
+				DB(sql).then(resp => {
+					console.log(resp);
+					alert('SUBMITTED!');
+				});
+			} else {
+				alert('ALREADY REGISTERED!');
+			};
+		});
+	};
+
+	render() {
+		return(
+			<div className="Register">
+				<h3 className="vote-h3">REGISTRATION</h3>
+				<input type="text" className="inp" onChange={evt => this.handleChange("aid", evt)} placeholder="AADHAR"/>
+				<input type="text" className="inp" onChange={evt => this.handleChange("name", evt)} placeholder="NAME"/>
+				<input type="text" className="inp" onChange={evt => this.handleChange("email", evt)} placeholder="EMAIL"/>
+				<input type="text" className="inp" onChange={evt => this.handleChange("number", evt)} placeholder="NUMBER"/>
+				<input type="password" className="inp" onChange={evt => this.handleChange("pin", evt)} placeholder="PIN"/>
+				<input type="text" className="inp" onClick={evt => this.handleSigner(evt)} readOnly value="SIGNER NOT CONNECTED. CLICK ME!"/>
+				<input type="button" className="inp-btn" onClick={() => this.handleSubmit()} value="SUBMIT"/>
+				<div className="empty_space_bottom"> </div>
+			</div>
+		);
+	}
+}
+
+export default Register;
