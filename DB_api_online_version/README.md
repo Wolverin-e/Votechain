@@ -1,2 +1,2 @@
 # DB_api
-DB_api for votechain
+Secured API for connection between database, blockchain and website. 
