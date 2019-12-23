@@ -1,7 +1,11 @@
 const express = require('express');
 const mysql = require("mysql");
+
+////////////////////////////////////// ENCRYPTION
 const cryptico = require("cryptico-js");
 const key = cryptico.generateRSAKey("6.8000112240", 2048);
+
+///////////////////////////////////// WEB3
 const Web3 = require('web3');
 const url = 'http://localhost:7545';
 const web3 = new Web3(new Web3.providers.HttpProvider(url));
@@ -12,11 +16,13 @@ account = "0xf3e9089020137b315948b6b917160f0330f71833";
 priv_key = Buffer.from("ea0775962dad90a9d6a6888ef1256b846e534887e4df81a067621b29130b854a", 'hex');
 
 const contract = new web3.eth.Contract(abi, address);
+//////////////////////////////////////
+
 
 const con = mysql.createConnection({
 	host: 'localhost', 
 	user: 'root', 
-	password: '', 
+	password: 'mypass', 
 	database: 'votechain'
 });
 con.connect();
