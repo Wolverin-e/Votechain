@@ -1,0 +1,35 @@
+version: "3"
+
+services:
+
+  my-sql-server:
+    image: mysql:8.0.1
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: mypass
+    networks:
+      - my-network
+    volumes:
+      - ./my-data:/var/lib/mysql
+
+  php-my-admin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - 8080:80
+    environment:
+      PMA_HOST: my-sql-server
+    networks:
+      - my-network
+    depends_on:
+      - my-sql-server
+
+  ganache-rpc:
+    image: trufflesuite/ganache-cli
+    ports:
+      - 8545:8545
+    networks:
+      - my-network
+
+networks:
+  my-network:
