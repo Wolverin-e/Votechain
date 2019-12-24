@@ -12,7 +12,7 @@ class Details extends Component {
 	};
 
 	componentDidMount(){
-		fetch("http://192.168.0.102:3001/result", {
+		fetch("https://srvr.local:3001/result", {
 		method: "GET", 
 		headers: {
 			'Accept': 'application/json', 

@@ -1,6 +1,7 @@
 const express = require('express');
 const mysql = require("mysql");
-
+const https = require("https");
+const fs = require('fs');
 ////////////////////////////////////// ENCRYPTION
 const cryptico = require("cryptico-js");
 const key = cryptico.generateRSAKey("6.8000112240", 2048);
@@ -81,6 +82,13 @@ app.post('/', (req, res) => {
 	})
 });
 
-app.listen(3001, () => {
-	console.log('Started on 3001!');
-});
+// app.listen(3001, () => {
+// 	console.log('Started on 3001!');
+// });
+
+https.createServer({
+	key: fs.readFileSync('srvr.key'), 
+	cert: fs.readFileSync('srvr.cert')
+}, app).listen(3001, () => {
+	console.log("Started on 3001 over HTTPS only!");
+})

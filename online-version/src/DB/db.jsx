@@ -1,7 +1,7 @@
 const fetch = require('node-fetch');
 
 var DB = (query) => {
-	return fetch("http://srvr.local:3001", {
+	return fetch("https://srvr.local:3001", {
 		method: "POST", 
 		body: JSON.stringify({qry: query}), 
 		headers: {

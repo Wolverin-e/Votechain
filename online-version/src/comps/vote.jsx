@@ -20,7 +20,7 @@ class Vote extends Component {
 	handleVote = () => {
 		var hashed = this.props.user.aid+'---'+this.state.for
 		// console.log(hashed)
-		fetch("http://srvr.local:3001/vote", {
+		fetch("https://srvr.local:3001/vote", {
 			method: "POST", 
 			body: JSON.stringify({vhash: Hasher(hashed).cipher}), 
 			headers: {
