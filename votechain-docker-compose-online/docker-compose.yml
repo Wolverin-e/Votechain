@@ -19,6 +19,8 @@ services:
       - 8080:80
     environment:
       PMA_HOST: my-sql-server
+      PMA_USER: root
+      PMA_PASSWORD: mypass
     networks:
       - my-network
     depends_on:
