@@ -8,13 +8,14 @@ const key = cryptico.generateRSAKey("6.8000112240", 2048);
 
 ///////////////////////////////////// WEB3
 const Web3 = require('web3');
-const url = 'http://localhost:7545';
+const url = 'http://localhost:8545';
 const web3 = new Web3(new Web3.providers.HttpProvider(url));
 var Tx = require('ethereumjs-tx').Transaction;
-const address = "0x69cc0f585f890658a0f98c1db84447895534fd0c";
-const abi = [{"constant":true,"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"candidates","outputs":[{"internalType":"uint256","name":"aid","type":"uint256"},{"internalType":"string","name":"name","type":"string"},{"internalType":"string","name":"territory","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"uint256","name":"_aid","type":"uint256"},{"internalType":"string","name":"_name","type":"string"},{"internalType":"string","name":"_territory","type":"string"}],"name":"add_candidate","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"vote_tokens","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"uint256","name":"_candidate_id","type":"uint256"}],"name":"get_votes","outputs":[{"internalType":"uint256","name":"votes","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"no_of_candidates","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"uint256","name":"_aid","type":"uint256"},{"internalType":"uint256","name":"_candidate_id","type":"uint256"}],"name":"transfer_vote","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string","name":"_name","type":"string"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"}];
-account = "0xf3e9089020137b315948b6b917160f0330f71833";
-priv_key = Buffer.from("ea0775962dad90a9d6a6888ef1256b846e534887e4df81a067621b29130b854a", 'hex');
+const address = "0xca7780067d937f045a13a3835f69610f84ae8734";
+const abi = [{"constant":false,"inputs":[{"name":"_aid","type":"uint16"},{"name":"_to","type":"uint8"}],"name":"transfer_vote","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_aid","type":"uint16"}],"name":"has_voted","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_from","type":"uint8"}],"name":"get_votes","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"}],"name":"add_candidate","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_deployer_name","type":"string"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"}];
+account = "0xee3af18b95f983e1a6104803dd8562074759ae77";
+// remove 0x from begginning of private key..
+priv_key = Buffer.from("9f2dacdc65cd4efa74bbd601288eb65b785cbc681618dd1189355d2585d99455", 'hex');
 
 const contract = new web3.eth.Contract(abi, address);
 //////////////////////////////////////
