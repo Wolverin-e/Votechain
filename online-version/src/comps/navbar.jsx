@@ -13,12 +13,12 @@ class navbar extends Component {
       let nav_items = document.getElementsByClassName("nav-item");
       for (var i=0; i<nav_items.length; i++) {
         nav_items[i].addEventListener("click",function() {
-          // console.log('Clicked!');
           var current = document.getElementsByClassName("active");
           current[0].className = current[0].className.replace(" active", "");
           this.className += " active";
         });
-      }});
+      }
+    });
   }
 
   render() {

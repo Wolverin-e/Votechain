@@ -2,30 +2,29 @@ const express = require('express');
 const mysql = require("mysql");
 const https = require("https");
 const fs = require('fs');
+
 ////////////////////////////////////// ENCRYPTION
 const cryptico = require("cryptico-js");
-const key = cryptico.generateRSAKey("6.8000112240", 2048);
+const key = cryptico.generateRSAKey(process.env.REACT_APP_API_PRIVATE_KEY, process.env.REACT_APP_API_ENCRYPTION_LEVEL);
 
 ///////////////////////////////////// WEB3
 const Web3 = require('web3');
-const url = 'http://localhost:8545';
-const web3 = new Web3(new Web3.providers.HttpProvider(url));
 var Tx = require('ethereumjs-tx').Transaction;
-const address = "0xca7780067d937f045a13a3835f69610f84ae8734";
-const abi = [{"constant":false,"inputs":[{"name":"_aid","type":"uint16"},{"name":"_to","type":"uint8"}],"name":"transfer_vote","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_aid","type":"uint16"}],"name":"has_voted","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_from","type":"uint8"}],"name":"get_votes","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"}],"name":"add_candidate","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_deployer_name","type":"string"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"}];
-account = "0xee3af18b95f983e1a6104803dd8562074759ae77";
-// remove 0x from begginning of private key..
-priv_key = Buffer.from("9f2dacdc65cd4efa74bbd601288eb65b785cbc681618dd1189355d2585d99455", 'hex');
-
+const url = process.env.REACT_APP_RPC;
+const web3 = new Web3(new Web3.providers.HttpProvider(url));
+const address = process.env.REACT_APP_CONTRACT_ADDRESS;
+const abi = JSON.parse(process.env.REACT_APP_CONTRACT_ABI);
+const account = process.env.REACT_APP_ACCOUNT;
+const priv_key = Buffer.from(process.env.REACT_APP_ACCOUNT_PRIVATE_KEY, 'hex');
 const contract = new web3.eth.Contract(abi, address);
 //////////////////////////////////////
 
 
 const con = mysql.createConnection({
-	host: 'localhost', 
-	user: 'root', 
-	password: 'mypass', 
-	database: 'votechain'
+	host: process.env.REACT_APP_DB_HOST, 
+	user: process.env.REACT_APP_DB_USER, 
+	password: process.env.REACT_APP_DB_PASSWORD, 
+	database: process.env.REACT_APP_DB_DATABASE_NAME
 });
 con.connect();
 
@@ -56,13 +55,13 @@ app.post('/vote', (req, res) => {
 
 		web3.eth.sendSignedTransaction(raw, (err, txHash)=>{
 			sql = "UPDATE voters SET vhash='"+txHash+"' WHERE aid='"+items[0]+"'"
-			console.log(sql);
+			// console.log(sql);
 			con.query(sql, (err, results, fields) => {
 				if (err) throw err;
 			})
 		}).then(()=>{
 			res.send({voted: true});
-			console.log(items);
+			// console.log(items);
 		});
 	});
 });
@@ -90,6 +89,6 @@ app.post('/', (req, res) => {
 https.createServer({
 	key: fs.readFileSync('srvr.key'), 
 	cert: fs.readFileSync('srvr.cert')
-}, app).listen(3001, () => {
-	console.log("Started on 3001 over HTTPS only!");
+}, app).listen(process.env.REACT_APP_DB_API_PORT, () => {
+	console.log("Started on "+process.env.REACT_APP_DB_API_PORT+" over HTTPS only!");
 })

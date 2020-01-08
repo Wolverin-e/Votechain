@@ -43,9 +43,9 @@ class DashboardSidebar extends Component {
 				<div className="title">
 					MENU
 				</div>
-                	<input type="button" id="vote" onClick={(evt) => this.changeTile(evt)} value="VOTE" className="sub-link sub-link-active"/>
-                	<input type="button" id="details" onClick={(evt) => this.changeTile(evt)} value="DETAILS" className="sub-link"/>
-                	<input type="button" id="logout" onClick={() => this.handleLogout()} value="LOGOUT" className="sub-link"/>
+				<input type="button" id="vote" onClick={(evt) => this.changeTile(evt)} value="VOTE" className="sub-link sub-link-active"/>
+				<input type="button" id="details" onClick={(evt) => this.changeTile(evt)} value="DETAILS" className="sub-link"/>
+				<input type="button" id="logout" onClick={() => this.handleLogout()} value="LOGOUT" className="sub-link"/>
 			</div>
 			{ this.state.vote?<Vote user={this.props.location.state.voter}/>:true }
 			{ this.state.details?<Details />:true }

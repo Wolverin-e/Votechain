@@ -12,15 +12,16 @@ class Details extends Component {
 	};
 
 	componentDidMount(){
-		fetch("https://srvr.local:3001/result", {
-		method: "GET", 
-		headers: {
-			'Accept': 'application/json', 
-			'Content-Type': 'application/json'
-		}}).then( res => {
+		fetch(process.env.REACT_APP_DB_API+"/result", {
+			method: "GET", 
+			headers: {
+				'Accept': 'application/json', 
+				'Content-Type': 'application/json'
+			}
+		}).then( res => {
 			return res.json()
 		}).then( result => {
-			console.log(result);
+			// console.log(result);
 			this.setState({votes: result});
 		})
 	}

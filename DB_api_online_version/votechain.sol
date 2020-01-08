@@ -51,6 +51,16 @@ contract Votechain{
         return 0;
     }
     
+    function get_all_votes() view public returns (uint256 [] memory){
+        uint256[] memory all_votes = new uint256[](total_candidates); 
+        if(msg.sender == deployer){
+            for(uint8 i=1; i<=total_candidates; i++){
+                all_votes[i-1] = candidates[i].votes;
+            }
+        }
+        return all_votes;
+    }
+    
     function has_voted(uint16 _aid) view public returns (bool){
         if(msg.sender == deployer){
             return has_transferred[_aid];
@@ -59,7 +69,7 @@ contract Votechain{
     }
     
     function get_total_candidates() view public returns (uint8){
-        if(msg.sender != deployer){
+        if(msg.sender == deployer){
             return total_candidates;
         }
         return 0;

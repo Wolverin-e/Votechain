@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Redirect } from 'react-router-dom';
 import logo from '../imgs/vote4.png';
 import DB from '../DB/db';
-var crypto = require('crypto-js');
+const crypto = require('crypto-js');
 
 class Login extends Component {
 	constructor() {
@@ -30,8 +30,8 @@ class Login extends Component {
           DB("SELECT * FROM voters WHERE aid = '"+this.state.username+"'")
           .then(data => {
             const { qry_res } = data;
-            console.log(qry_res);
-            if (devID === crypto.AES.decrypt(qry_res[0].dhash, this.state.pass).toString(crypto.enc.Utf8)) {
+            // console.log(qry_res);
+            if ((qry_res.length) && devID === crypto.AES.decrypt(qry_res[0].dhash, this.state.pass).toString(crypto.enc.Utf8)) {
               this.setState({user: qry_res[0], redirect:true});
             } else {
               alert("PLEASE CHECK ID & PASSWORD");
@@ -46,9 +46,9 @@ class Login extends Component {
 	};
 
   render() {
-
   	if(this.state.redirect) {
-      console.log(this.state.user);
+      // console.log(this.state.user);
+      window.$has_voted = (this.state.user.vhash === '')?false:true;
       return <Redirect to={{pathname:"/dashboard", state: { voter: this.state.user}}} />;
   	}
 
