@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"All passed\" && exit 0",
+    "start-admin": "./node_modules/.bin/env-cmd -f ../.env node admin.js", 
     "start": "./node_modules/.bin/env-cmd -f ../.env node app.js"
   },
   "author": "",

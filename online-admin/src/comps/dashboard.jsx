@@ -1,19 +1,39 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
+import Add from './add';
+import Details from './details';
 
-export default class dashboard extends Component{
+class dashboard extends Component{
 
     constructor() {
 		super();
 		this.state = {
-			vote: true,
+			add: true,
 			details: false, 
 			logout: false
 		}
     }
+
+    componentDidMount() {
+        fetch(process.env.REACT_APP_ADMIN_API+"/candidates", {
+			method: "GET", 
+			headers: {
+				'Accept': 'application/json', 
+				'Content-Type': 'application/json'
+			}
+		}).then( res => {
+			return res.json()
+		}).then( result => {
+            this.props.dispatch({
+                type: "ATTACH-CANDIDATES", 
+                payload: result
+            });
+		})
+    }
     
     changeTile = async (evt) => {
-		this.setState({vote:false});
+		this.setState({add:false});
 		await Object.assign([], Object.keys(this.state).map((x) => {
 			return evt.target.id===x?{[x]:true}:{[x]:false}
         })).forEach( stateVar => {this.setState(stateVar);})
@@ -38,13 +58,19 @@ export default class dashboard extends Component{
                     <div className="title">
                         MENU
                     </div>
-                    <input type="button" id="vote" onClick={(evt) => this.changeTile(evt)} value="VOTE" className="sub-link sub-link-active"/>
+                    <input type="button" id="add" onClick={(evt) => this.changeTile(evt)} value="ADD" className="sub-link sub-link-active"/>
                     <input type="button" id="details" onClick={(evt) => this.changeTile(evt)} value="DETAILS" className="sub-link"/>
                     <input type="button" id="logout" onClick={() => this.handleLogout()} value="LOGOUT" className="sub-link"/>
                 </div>
-                {/* { this.state.vote?<Vote user={this.props.location.state.voter}/>:true } */}
-                {/* { this.state.details?<Details />:true } */}
+                { this.state.add?<Add />:true }
+                { this.state.details?<Details />:true}
             </div>
         )
     }
 }
+
+const mapStateToProps = state => {
+    return state;
+}
+
+export default connect(mapStateToProps)(dashboard);

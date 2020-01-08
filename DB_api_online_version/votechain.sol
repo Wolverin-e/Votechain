@@ -1,10 +1,6 @@
-// get_votes(id)
-// transfer_vote(aid, to)
-// add_candidate(name)
-// has_voted(aid)
-
+// Votechain
 pragma solidity >=0.4.22 <0.6.0;
-// pragma experimental ABIEncoderV2;
+pragma experimental ABIEncoderV2;
 
 contract Votechain{
     
@@ -14,7 +10,7 @@ contract Votechain{
     }
     
     address private deployer;
-    // string [] candidate_names;
+    string [] candidate_names;
     string private deployer_name;
     mapping (uint8 => Candidate) candidates;
     mapping (uint16 => bool) has_transferred;
@@ -32,7 +28,7 @@ contract Votechain{
         _candidate.name = _name;
         _candidate.votes = 0;
         candidates[++total_candidates] = _candidate;
-        // candidate_names.push(_name);
+        candidate_names.push(_name);
     }
     
     function transfer_vote(uint16 _aid, uint8 _to) public{
@@ -75,8 +71,11 @@ contract Votechain{
         return 0;
     }
     
-    // function get_candidates() view public returns (string [] memory){
-    //     return candidate_names;
-    // }
+    
+    function get_candidates() view public returns (string [] memory){
+        if(msg.sender == deployer){
+            return candidate_names;
+        }
+    }
     
 }

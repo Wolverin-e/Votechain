@@ -5,11 +5,9 @@ export default class about extends Component{
     render()
     {
         // console.log(this.props);
-        console.log(process.env);
         return(
             <div>
-                {/* <div>{this.props.prop1} {this.props.prop2}</div> */}
-                {/* <div> ABOUT! </div> */}
+                ABOUT
             </div>
         )
     }

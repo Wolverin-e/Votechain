@@ -9,6 +9,11 @@ const reducers = (state = default_state, action) => {
                 ...state, 
                 user: action.payload
             }
+        case 'ATTACH-CANDIDATES':
+            return{
+                ...state, 
+                candidates: action.payload
+            }
         default:
             return state
     }
