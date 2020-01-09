@@ -6,7 +6,6 @@
     "bootstrap": "^4.3.1",
     "cryptico-js": "^1.1.0",
     "crypto-js": "^3.1.9-1",
-    "dotenv": "^8.1.0",
     "env-cmd": "^10.0.1",
     "mysql": "^2.17.1",
     "node-fetch": "^2.6.0",

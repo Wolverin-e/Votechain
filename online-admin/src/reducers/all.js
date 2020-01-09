@@ -9,10 +9,33 @@ const reducers = (state = default_state, action) => {
                 ...state, 
                 user: action.payload
             }
+        case 'ATTACH-CANDIDATES-ERR':
+            if(state.votes){
+                return {
+                    ...state, 
+                    candidates: state.map(x => "LOADING")
+                }
+            } else {
+                return state;
+            }
         case 'ATTACH-CANDIDATES':
-            return{
+            return {
                 ...state, 
                 candidates: action.payload
+            }
+        case 'ATTACH-RESULTS-ERR':
+            if(state.candidates){
+                return {
+                    ...state, 
+                    votes: state.candidates.map(x => "LOADING")
+                }
+            } else {
+                return state;
+            }
+        case 'ATTACH-RESULTS':
+            return {
+                ...state, 
+                votes: action.payload
             }
         default:
             return state

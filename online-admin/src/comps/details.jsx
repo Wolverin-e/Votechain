@@ -3,30 +3,20 @@ import { connect } from 'react-redux';
 
 class Details extends Component {
 
-	state = {
-		votes: []
-	}
-
-	componentDidMount(){
-		fetch(process.env.REACT_APP_ADMIN_API+"/result", {
-			method: "GET", 
-			headers: {
-				'Accept': 'application/json', 
-				'Content-Type': 'application/json'
-			}
-		}).then( res => {
-			return res.json()
-		}).then( result => {
-			this.setState({votes: result});
-		})
-	}
-
 	render() {
-		
 		return(
 			<div className="dashboard2">
 				<div className="results">
-					{this.props.candidates.map( (x, i) => <h5>{x}:{this.state.votes[i]}</h5>)}
+					<table className="results-table">
+						{this.props.candidates.map( (x, i) => 
+							<tbody key={x}>
+								<tr className="results-tr" key={i}>
+									<td className="results-td-left">{x}</td>
+									<td className="results-td-right">{this.props.votes[i]}</td>
+								</tr>
+							</tbody>
+						)}
+					</table>
 				</div>
 			</div>
 		);

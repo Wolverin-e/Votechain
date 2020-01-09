@@ -20,7 +20,6 @@ class Vote extends Component {
 	handleVote = () => {
 		if(!window.$has_voted){
 			var hashed = this.props.user.aid+'---'+this.state.for
-			// console.log(hashed)
 			fetch(process.env.REACT_APP_DB_API+"/vote", {
 				method: "POST", 
 				body: JSON.stringify({vhash: Hasher(hashed).cipher}), 

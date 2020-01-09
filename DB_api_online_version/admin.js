@@ -31,14 +31,9 @@ con.connect();
 const app = express();
 app.use(express.json());
 
-app.post('/vote', (req, res) => {
-	var decrypted = cryptico.decrypt(req.body.vhash, key);
-	var items = decrypted.plaintext.split('---');
-	const taid = parseInt(items[0], 10);
-	const cid = parseInt(items[1], 10);
-	console.log(taid, cid);
-	const data = contract.methods.transfer_vote(taid, cid).encodeABI();
-	var vHash;
+app.post('/add', (req, res) => {
+	var decrypted_name = cryptico.decrypt(req.body.add, key).plaintext;
+	const data = contract.methods.add_candidate(decrypted_name).encodeABI();
 	web3.eth.getTransactionCount(account, (err, txCount) => {
 		const txObject = {
 			nonce: web3.utils.toHex(txCount), 
@@ -54,32 +49,20 @@ app.post('/vote', (req, res) => {
 		const raw = '0x'+serializedTx.toString('hex');
 
 		web3.eth.sendSignedTransaction(raw, (err, txHash)=>{
-			sql = "UPDATE voters SET vhash='"+txHash+"' WHERE aid='"+items[0]+"'"
-			// console.log(sql);
-			con.query(sql, (err, results, fields) => {
-				if (err) throw err;
-			})
+			console.log(txHash);
 		}).then(()=>{
-			res.send({voted: true});
-			// console.log(items);
+			res.send({added: true});
 		});
 	});
 });
 
 app.get('/result',async (req, res) => {
-	// var votes = [0, 0, 0, 0];
-	// votes[0] = await contract.methods.get_votes(1).call();
-	// votes[1] = await contract.methods.get_votes(2).call();
-	// votes[2] = await contract.methods.get_votes(3).call();
-	// votes[3] = await contract.methods.get_votes(4).call();
 	var votes = await contract.methods.get_all_votes().call();
-	console.log(votes);
 	res.send(votes);
 });
 
 app.get('/candidates', async (req, res) => {
 	var candidates = await contract.methods.get_candidates().call();
-	console.log(candidates);
 	res.send(candidates);
 })
 

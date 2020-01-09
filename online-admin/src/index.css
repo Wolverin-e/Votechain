@@ -231,4 +231,37 @@ body {
   transition: 500ms;
 }
 
+.add {
+  height: 100%;
+  width: 100%;
+  padding-top: 40%;
+}
+
+.results {
+  height: 100%;
+  width: 100%;
+}
+
+.results-table {
+  border-width: 0%;
+  color: white;
+  font-variant-caps: all-petite-caps;
+  font-size: larger;
+  text-align: left;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.results-table .results-td-left {
+  padding: 4% 20% 4% 0%;
+}
+
+.results-table .results-td-right {
+  padding: 4% 3% 4% 20%;
+}
+
+
 /* <---STOP DASHBOARD STYLING----> */

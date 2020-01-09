@@ -30,6 +30,9 @@ services:
     image: trufflesuite/ganache-cli
     ports:
       - 8545:8545
+    volumes:
+      - ./chain-data:/ganache_data
+    command: ["--db=/ganache_data", "--mnemonic='kiwi visit marble accident acid urge lumber type picnic have split charge'"]
     networks:
       - my-network
 

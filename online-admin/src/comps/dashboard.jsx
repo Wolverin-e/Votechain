@@ -3,33 +3,20 @@ import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Add from './add';
 import Details from './details';
+import { fetch_candidates } from '../actions/fetch_candidates';
+import { fetch_results } from '../actions/fetch_results';
 
 class dashboard extends Component{
 
-    constructor() {
-		super();
-		this.state = {
-			add: true,
-			details: false, 
-			logout: false
-		}
+    state = {
+        add: true,
+        details: false, 
+        logout: false
     }
 
     componentDidMount() {
-        fetch(process.env.REACT_APP_ADMIN_API+"/candidates", {
-			method: "GET", 
-			headers: {
-				'Accept': 'application/json', 
-				'Content-Type': 'application/json'
-			}
-		}).then( res => {
-			return res.json()
-		}).then( result => {
-            this.props.dispatch({
-                type: "ATTACH-CANDIDATES", 
-                payload: result
-            });
-		})
+        this.props.dispatch(fetch_candidates());
+        this.props.dispatch(fetch_results());
     }
     
     changeTile = async (evt) => {
