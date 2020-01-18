@@ -41,8 +41,9 @@ class Register extends Component {
 		const pin = this.state.pin;
 		await this.setState({deviceID: crypto.AES.encrypt(device, pin).toString()});
 		console.log(this.state.deviceID);
+		// eslint-disable-next-line
 		var sql = "INSERT INTO voters (aid, name, email, number, vhash, dhash) VALUES ("+this.state.aid+", '"+this.state.name+"', '"+this.state.email+"', "+this.state.number+', '+"'', '"+this.state.deviceID+"')";
-		console.log(sql);
+		// console.log(sql);
 		var validation_sql = "SELECT aid FROM voters WHERE aid="+this.state.aid;
 		DB(validation_sql).then(res => {
 			if(!res.qry_res.length) {

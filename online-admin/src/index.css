@@ -1,0 +1,417 @@
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  monospace;
+}
+
+/* <---------------------------------------------------------------------------> */
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-image: url('./imgs/4.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
+  width: 100vw;
+}
+
+.nav-item:hover{
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+}
+
+.App {
+  text-align: center;
+}
+
+/* <---START NAVBAR STYLING----> */
+.custom-nav{
+  background-color: rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(30px);
+  top: 0;
+}
+
+.active{
+  background-color: rgba(255, 255, 255, 0.4);
+  border-radius: 2px;
+  color: black;
+}
+
+.navbar-brand{
+  padding-right: 15px;
+  border-right-style: solid;
+  border-width: 0px 0.5px 0px 0px;
+  border-color: rgba(255, 255, 255, 0.50);
+}
+
+/* <---END NAVBAR STYLING----> */
+
+
+/* <---START FORM STYLING----> */
+
+.inp {
+  position: relative;
+  margin-top: 12%;
+  background-color: rgba(0, 0, 0, 0.50);
+  border: 0px;
+  height: 10%;
+  width: 85%;
+  align-self: center;
+  text-align: center;
+  color: white;
+  border-radius: 5px;
+  transition: 500ms ease-out;
+  font-weight: bold;
+}
+
+.inp:hover, .inp:focus {
+  position: relative;
+  margin-top: 12%;
+  background-color: rgba(255, 255, 255, 0.25);
+  /*border: 2px solid white;*/
+  /*border-top: 1px solid rgba(255, 255, 255, 0.7);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.7);*/
+  height: 10%;
+  width: 87%;
+  align-self: center;
+  text-align: center;
+  color: black;
+  border-radius: 5px;
+  transition: 500ms ease-out;
+  font-weight: bold;
+}
+
+.inp-btn {
+  position: relative;
+  margin-top: 12%;
+  background-color: rgba(0, 0, 0, 0.50);
+  border: 0px;
+  border-radius: 5px;
+  color: rgba(255, 255, 255, 0.7);
+  width: 50%;
+  height: 10%;
+  transition: 500ms;
+  font-weight: bold;
+}
+
+.inp-btn:hover {
+  position: relative;
+  margin-top: 12%;
+  background-color: rgba(255, 255, 255, 0.25);
+  border: 0px;
+  border-radius: 5px;
+  color: black;
+  width: 51%;
+  height: 10%;
+  transition: 500ms;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+::placeholder {
+  color: white;
+  opacity: 0.25;
+  font-size: 0.90em;
+  font-weight: bold;
+}
+
+/* <---STOP FORM STYLING----> */
+
+
+/* <---START LOGIN-PAGE STYLING----> */
+.login {
+  margin-left: 35%;
+  margin-top: 7%;
+  position: absolute;
+  width: 30%;
+  height: 60%;
+  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0.15);
+  /*box-shadow: 0px 0px 15px 0px #000;*/
+  backdrop-filter: blur(17px);
+}
+
+.logo {
+  position: relative;
+  opacity: 0.75;
+  margin-top: 8%;
+  align-self: center;
+  height:125px;
+  width: 125px;
+}
+
+/* <---STOP LOGIN-PAGE STYLING----> */
+
+/* <---START DASHBOARD STYLING----> */
+.dashboard1 {
+  overflow-x: hidden;
+  position: absolute;
+/*  padding-top: 5px;
+  padding-bottom: 5px;*/
+  margin-left: 25%;
+  margin-top: 7%;
+  width: 10%;
+  height: 70%;
+  backdrop-filter: blur(15px);
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 10px 0px 0px 10px;
+  transition: 400ms;
+}
+
+.dashboard1 .title {
+  padding: 10px 0px 10px 4px;
+  color: white;
+  text-align: center;
+  font-weight: bold;
+  /*margin-bottom: 5px;*/
+  font-size: 0.85em;
+  letter-spacing: 2px;
+  background-color: rgba(0, 0, 0, 0.55);
+  backdrop-filter: brightness(150%);
+}
+
+
+.dashboard2 {
+  position: absolute;
+  margin-left: 35%;
+  margin-top: 7%;
+  width: 40%;
+  height: 70%;
+  backdrop-filter: blur(30px);
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 0px 15px 15px 0px;
+}
+
+.sub-link {
+  position: relative;
+  width: 100%;
+  border-width: 0px 0px 0.05px 0px;
+  border-color: rgba(0, 0, 0, 0.5);
+  align-self: center;
+  padding: 5px 0px 5px 0px;
+  background-color: rgba(0, 0, 0, 0.15);
+  color: white;
+  font-size: 0.75em;
+  /*font-weight: bold;*/
+  transition: 500ms;
+}
+
+.sub-link-active {
+  position: relative;
+  width: 100%;
+  border-width: 0px 0px 0.05px 0px;
+  border-color: rgba(0, 0, 0, 0.5);
+  align-self: center;
+  padding: 5px 0px 5px 0px;
+  background-color: rgba(255, 255, 255, 0.15);
+  color: white;
+  font-size: 0.75em;
+  /*font-weight: bold;*/
+  transition: 500ms;
+}
+
+.sub-link:hover {
+  position: relative;
+  width: 100%;
+  border-width: 0px 0px 0.05px 0px;
+  border-color: rgba(0, 0, 0, 1);
+  align-self: center;
+  padding: 5px 0px 5px 0px;
+  background-color: rgba(0, 0, 0, 0.50);
+  color: white;
+  letter-spacing: 1.5px;
+  font-size: 0.75em;
+  font-weight: bold;
+  transition: 500ms;
+}
+
+.add {
+  height: 100%;
+  width: 100%;
+  padding-top: 0%;
+}
+
+.add .inp {
+  position: relative;
+  margin-top: 12%;
+  background-color: rgba(0, 0, 0, 0.50);
+  border: 0px;
+  height: 8%;
+  width: 75%;
+  align-self: center;
+  text-align: center;
+  color: white;
+  border-radius: 5px;
+  transition: 500ms ease-out;
+  font-weight: bold;
+}
+
+.add .inp:hover, .add .inp:focus {
+  position: relative;
+  margin-top: 12%;
+  background-color: rgba(255, 255, 255, 0.25);
+  height: 8%;
+  width: 76%;
+  align-self: center;
+  text-align: center;
+  color: black;
+  border-radius: 5px;
+  transition: 500ms ease-out;
+  font-weight: bold;
+}
+
+.add .inp-btn {
+  position: relative;
+  margin-top: 12%;
+  background-color: rgba(0, 0, 0, 0.50);
+  border: 0px;
+  border-radius: 5px;
+  color: rgba(255, 255, 255, 0.7);
+  width: 50%;
+  height: 8%;
+  transition: 500ms;
+  font-weight: bold;
+}
+
+.add .inp-btn:hover {
+  position: relative;
+  margin-top: 12%;
+  background-color: rgba(255, 255, 255, 0.25);
+  border: 0px;
+  border-radius: 5px;
+  color: black;
+  width: 51%;
+  height: 8%;
+  transition: 500ms;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+.add .logo {
+  position: relative;
+  opacity: 0.75;
+  margin-top: 8%;
+  align-self: center;
+  height:150px;
+  width: 150px;
+}
+
+.deploy {
+  height: 100%;
+  width: 100%;
+  padding-top: 0%;
+}
+
+.deploy .inp {
+  position: relative;
+  margin-top: 12%;
+  background-color: rgba(0, 0, 0, 0.50);
+  border: 0px;
+  height: 8%;
+  width: 75%;
+  align-self: center;
+  text-align: center;
+  color: white;
+  border-radius: 5px;
+  transition: 500ms ease-out;
+  font-weight: bold;
+}
+
+.deploy .inp:hover, .deploy .inp:focus {
+  position: relative;
+  margin-top: 12%;
+  background-color: rgba(255, 255, 255, 0.25);
+  height: 8%;
+  width: 76%;
+  align-self: center;
+  text-align: center;
+  color: black;
+  border-radius: 5px;
+  transition: 500ms ease-out;
+  font-weight: bold;
+}
+
+.deploy .inp-btn {
+  position: relative;
+  margin-top: 12%;
+  background-color: rgba(0, 0, 0, 0.50);
+  border: 0px;
+  border-radius: 5px;
+  color: rgba(255, 255, 255, 0.7);
+  width: 50%;
+  height: 8%;
+  transition: 500ms;
+  font-weight: bold;
+}
+
+.deploy .inp-btn:hover {
+  position: relative;
+  margin-top: 12%;
+  background-color: rgba(255, 255, 255, 0.25);
+  border: 0px;
+  border-radius: 5px;
+  color: black;
+  width: 51%;
+  height: 8%;
+  transition: 500ms;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+.deploy .logo {
+  position: relative;
+  opacity: 0.75;
+  margin-top: 8%;
+  align-self: center;
+  height:150px;
+  width: 150px;
+}
+
+
+.results {
+  height: 100%;
+  width: 100%;
+}
+
+.results-table {
+  border-width: 0%;
+  color: white;
+  font-variant-caps: all-petite-caps;
+  font-size: larger;
+  text-align: left;
+}
+
+.results {
+  height: 100%;
+  width: 100%;
+}
+
+.results-table {
+  border-width: 0%;
+  color: white;
+  font-variant-caps: all-petite-caps;
+  font-size: larger;
+  text-align: left;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.results-table .results-td-left {
+  padding: 4% 20% 4% 0%;
+}
+
+.results-table .results-td-right {
+  padding: 4% 3% 4% 20%;
+}
+
+
+/* <---STOP DASHBOARD STYLING----> */

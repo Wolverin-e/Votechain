@@ -1,3 +1,0 @@
-# VOTECHAIN
-
-React based app

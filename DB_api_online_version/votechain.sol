@@ -1,20 +1,18 @@
-// get_votes(id)
-// transfer_vote(aid, to)
-// add_candidate(name)
-// has_voted(aid)
-
+// Votechain
 pragma solidity >=0.4.22 <0.6.0;
-// pragma experimental ABIEncoderV2;
+pragma experimental ABIEncoderV2;
 
 contract Votechain{
     
     struct Candidate{
         string name;
+        string about;
         uint256 votes;
     }
     
     address private deployer;
-    // string [] candidate_names;
+    string [] candidate_names;
+    string [] candidate_abouts;
     string private deployer_name;
     mapping (uint8 => Candidate) candidates;
     mapping (uint16 => bool) has_transferred;
@@ -26,13 +24,15 @@ contract Votechain{
         total_candidates = 0;
     }
     
-    function add_candidate(string memory _name) public{
+    function add_candidate(string memory _name, string memory _about) public{
         if(msg.sender != deployer) return;
         Candidate memory _candidate;
         _candidate.name = _name;
+        _candidate.about = _about;
         _candidate.votes = 0;
         candidates[++total_candidates] = _candidate;
-        // candidate_names.push(_name);
+        candidate_names.push(_name);
+        candidate_abouts.push(_about);
     }
     
     function transfer_vote(uint16 _aid, uint8 _to) public{
@@ -51,6 +51,16 @@ contract Votechain{
         return 0;
     }
     
+    function get_all_votes() view public returns (uint256 [] memory){
+        uint256[] memory all_votes = new uint256[](total_candidates); 
+        if(msg.sender == deployer){
+            for(uint8 i=1; i<=total_candidates; i++){
+                all_votes[i-1] = candidates[i].votes;
+            }
+        }
+        return all_votes;
+    }
+    
     function has_voted(uint16 _aid) view public returns (bool){
         if(msg.sender == deployer){
             return has_transferred[_aid];
@@ -59,14 +69,26 @@ contract Votechain{
     }
     
     function get_total_candidates() view public returns (uint8){
-        if(msg.sender != deployer){
+        if(msg.sender == deployer){
             return total_candidates;
         }
         return 0;
     }
     
-    // function get_candidates() view public returns (string [] memory){
-    //     return candidate_names;
-    // }
     
+    function get_candidates() view public returns (string [] memory){
+        if(msg.sender == deployer){
+            return candidate_names;
+        }
+    }
+    
+    function get_candidates_about() view public returns (Candidate [] memory){
+        Candidate [] memory returnable_candidates = new Candidate[](total_candidates);
+        if(msg.sender == deployer){
+            for(uint8 i=1; i<=total_candidates; i++){
+                returnable_candidates[i-1] = candidates[i];
+            }
+        }
+        return returnable_candidates;
+    }
 }

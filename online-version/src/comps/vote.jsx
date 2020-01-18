@@ -18,21 +18,25 @@ class Vote extends Component {
 	};
 
 	handleVote = () => {
-		var hashed = this.props.user.aid+'---'+this.state.for
-		// console.log(hashed)
-		fetch("https://srvr.local:3001/vote", {
-			method: "POST", 
-			body: JSON.stringify({vhash: Hasher(hashed).cipher}), 
-			headers: {
-				'Accept': 'application/json', 
-				'Content-Type': 'application/json'
-			}
-		}).then(res => {
-			return res.json();
-		}).then(resl => {
-			this.setState(resl);
-			alert("VOTED SUCCESSFULLY");
-		});
+		if(!window.$has_voted){
+			var hashed = this.props.user.aid+'---'+this.state.for
+			fetch(process.env.REACT_APP_DB_API+"/vote", {
+				method: "POST", 
+				body: JSON.stringify({vhash: Hasher(hashed).cipher}), 
+				headers: {
+					'Accept': 'application/json', 
+					'Content-Type': 'application/json'
+				}
+			}).then(res => {
+				return res.json();
+			}).then(resl => {
+				this.setState(resl);
+				window.has_voted = true;
+				alert("VOTED SUCCESSFULLY");
+			});
+		} else {
+			alert("😏😑 Already Voted go back to enjoying yourself!");
+		}
 	};
 
 	componentDidMount() {

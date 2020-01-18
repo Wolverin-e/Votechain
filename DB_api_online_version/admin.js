@@ -9,7 +9,7 @@ const key = cryptico.generateRSAKey(process.env.REACT_APP_API_PRIVATE_KEY, proce
 
 ///////////////////////////////////// WEB3
 const Web3 = require('web3');
-var Tx = require('ethereumjs-tx').Transaction;
+var Txs = require('ethereumjs-tx').Transaction;
 const url = process.env.REACT_APP_RPC;
 const web3 = new Web3(new Web3.providers.HttpProvider(url));
 const address = process.env.REACT_APP_CONTRACT_ADDRESS;
@@ -31,14 +31,10 @@ con.connect();
 const app = express();
 app.use(express.json());
 
-app.post('/vote', (req, res) => {
-	var decrypted = cryptico.decrypt(req.body.vhash, key);
-	var items = decrypted.plaintext.split('---');
-	const taid = parseInt(items[0], 10);
-	const cid = parseInt(items[1], 10);
-	console.log(taid, cid);
-	const data = contract.methods.transfer_vote(taid, cid).encodeABI();
-	var vHash;
+app.post('/add', (req, res) => {
+	var decrypted_name = cryptico.decrypt(req.body.add, key).plaintext;
+	var decrypted_about = cryptico.decrypt(req.body.about, key).plaintext;
+	const data = contract.methods.add_candidate(decrypted_name, decrypted_about).encodeABI();
 	web3.eth.getTransactionCount(account, (err, txCount) => {
 		const txObject = {
 			nonce: web3.utils.toHex(txCount), 
@@ -48,32 +44,52 @@ app.post('/vote', (req, res) => {
 			data: data
 		}
 
-		const tx = new Tx(txObject);
+		const tx = new Txs(txObject);
 		tx.sign(priv_key);
 		const serializedTx = tx.serialize();
 		const raw = '0x'+serializedTx.toString('hex');
 
 		web3.eth.sendSignedTransaction(raw, (err, txHash)=>{
-			sql = "UPDATE voters SET vhash='"+txHash+"' WHERE aid='"+items[0]+"'"
-			// console.log(sql);
-			con.query(sql, (err, results, fields) => {
-				if (err) throw err;
-			})
+			console.log("ADDED CANDIDATE: "+decrypted_name);
 		}).then(()=>{
-			res.send({voted: true});
-			// console.log(items);
+			res.send({added: true});
 		});
 	});
 });
 
-app.get('/result',async (req, res) => {
-	var votes = [0, 0, 0, 0];
-	votes[0] = await contract.methods.get_votes(1).call();
-	votes[1] = await contract.methods.get_votes(2).call();
-	votes[2] = await contract.methods.get_votes(3).call();
-	votes[3] = await contract.methods.get_votes(4).call();
-	await res.send(votes);
+app.post('/deploy', (req, res) => {
+	const _deployer = cryptico.decrypt(req.body.deployer, key).plaintext;
+	const data = process.env.REACT_APP_CONTRACT_DATA;
+
+	votechainContract = new web3.eth.Contract(abi, {
+		from: account, 
+		gas: 4700000, 
+		gasPrice: web3.utils.toHex(web3.utils.toWei('20', 'gwei'))
+	})
+
+	votechainContract.deploy({
+		data: data, 
+		arguments: [_deployer]
+	}).send().on('receipt', receipt => {
+		console.log("NEW CONTRACT: "+receipt.contractAddress);
+		res.send({contract_address: receipt.contractAddress});
+	})
 });
+
+app.get('/result',async (req, res) => {
+	var votes = await contract.methods.get_all_votes().call();
+	res.send(votes);
+});
+
+app.get('/candidates', async (req, res) => {
+	var candidates = await contract.methods.get_candidates().call();
+	res.send(candidates);
+})
+
+app.get('/all', async (req, res) => {
+	var candidates = await contract.methods.get_candidates_about().call();
+	res.send(candidates);
+})
 
 app.post('/', (req, res) => {
 	con.query(req.body.qry, (err, results, fields) => {
@@ -82,13 +98,9 @@ app.post('/', (req, res) => {
 	})
 });
 
-// app.listen(3001, () => {
-// 	console.log('Started on 3001!');
-// });
-
 https.createServer({
 	key: fs.readFileSync('srvr.key'), 
 	cert: fs.readFileSync('srvr.cert')
-}, app).listen(process.env.REACT_APP_DB_API_PORT, () => {
-	console.log("Started on "+process.env.REACT_APP_DB_API_PORT+" over HTTPS only!");
+}, app).listen(process.env.REACT_APP_ADMIN_API_PORT, () => {
+	console.log("Started on "+process.env.REACT_APP_ADMIN_API_PORT+" over HTTPS only!");
 })
