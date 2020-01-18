@@ -9,7 +9,7 @@ const key = cryptico.generateRSAKey(process.env.REACT_APP_API_PRIVATE_KEY, proce
 
 ///////////////////////////////////// WEB3
 const Web3 = require('web3');
-var Tx = require('ethereumjs-tx').Transaction;
+var Txs = require('ethereumjs-tx').Transaction;
 const url = process.env.REACT_APP_RPC;
 const web3 = new Web3(new Web3.providers.HttpProvider(url));
 const address = process.env.REACT_APP_CONTRACT_ADDRESS;
@@ -33,7 +33,8 @@ app.use(express.json());
 
 app.post('/add', (req, res) => {
 	var decrypted_name = cryptico.decrypt(req.body.add, key).plaintext;
-	const data = contract.methods.add_candidate(decrypted_name).encodeABI();
+	var decrypted_about = cryptico.decrypt(req.body.about, key).plaintext;
+	const data = contract.methods.add_candidate(decrypted_name, decrypted_about).encodeABI();
 	web3.eth.getTransactionCount(account, (err, txCount) => {
 		const txObject = {
 			nonce: web3.utils.toHex(txCount), 
@@ -43,17 +44,36 @@ app.post('/add', (req, res) => {
 			data: data
 		}
 
-		const tx = new Tx(txObject);
+		const tx = new Txs(txObject);
 		tx.sign(priv_key);
 		const serializedTx = tx.serialize();
 		const raw = '0x'+serializedTx.toString('hex');
 
 		web3.eth.sendSignedTransaction(raw, (err, txHash)=>{
-			console.log(txHash);
+			console.log("ADDED CANDIDATE: "+decrypted_name);
 		}).then(()=>{
 			res.send({added: true});
 		});
 	});
+});
+
+app.post('/deploy', (req, res) => {
+	const _deployer = cryptico.decrypt(req.body.deployer, key).plaintext;
+	const data = process.env.REACT_APP_CONTRACT_DATA;
+
+	votechainContract = new web3.eth.Contract(abi, {
+		from: account, 
+		gas: 4700000, 
+		gasPrice: web3.utils.toHex(web3.utils.toWei('20', 'gwei'))
+	})
+
+	votechainContract.deploy({
+		data: data, 
+		arguments: [_deployer]
+	}).send().on('receipt', receipt => {
+		console.log("NEW CONTRACT: "+receipt.contractAddress);
+		res.send({contract_address: receipt.contractAddress});
+	})
 });
 
 app.get('/result',async (req, res) => {
@@ -63,6 +83,11 @@ app.get('/result',async (req, res) => {
 
 app.get('/candidates', async (req, res) => {
 	var candidates = await contract.methods.get_candidates().call();
+	res.send(candidates);
+})
+
+app.get('/all', async (req, res) => {
+	var candidates = await contract.methods.get_candidates_about().call();
 	res.send(candidates);
 })
 

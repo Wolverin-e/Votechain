@@ -11,7 +11,7 @@ export function fetch_results() {
         }).then( res => {
             return res.json()
         }).then( resl => {
-            console.log(resl);
+            // console.log(resl);
             
             return dispatch({
                 type: "ATTACH-RESULTS", 

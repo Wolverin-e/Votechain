@@ -6,11 +6,13 @@ contract Votechain{
     
     struct Candidate{
         string name;
+        string about;
         uint256 votes;
     }
     
     address private deployer;
     string [] candidate_names;
+    string [] candidate_abouts;
     string private deployer_name;
     mapping (uint8 => Candidate) candidates;
     mapping (uint16 => bool) has_transferred;
@@ -22,13 +24,15 @@ contract Votechain{
         total_candidates = 0;
     }
     
-    function add_candidate(string memory _name) public{
+    function add_candidate(string memory _name, string memory _about) public{
         if(msg.sender != deployer) return;
         Candidate memory _candidate;
         _candidate.name = _name;
+        _candidate.about = _about;
         _candidate.votes = 0;
         candidates[++total_candidates] = _candidate;
         candidate_names.push(_name);
+        candidate_abouts.push(_about);
     }
     
     function transfer_vote(uint16 _aid, uint8 _to) public{
@@ -78,4 +82,13 @@ contract Votechain{
         }
     }
     
+    function get_candidates_about() view public returns (Candidate [] memory){
+        Candidate [] memory returnable_candidates = new Candidate[](total_candidates);
+        if(msg.sender == deployer){
+            for(uint8 i=1; i<=total_candidates; i++){
+                returnable_candidates[i-1] = candidates[i];
+            }
+        }
+        return returnable_candidates;
+    }
 }

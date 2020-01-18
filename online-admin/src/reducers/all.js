@@ -1,5 +1,7 @@
 let default_state = {
-    user: {}
+    user: {}, 
+    new_contract_deployed: false, 
+    new_contract_address: ""
 }
 
 const reducers = (state = default_state, action) => {
@@ -36,6 +38,12 @@ const reducers = (state = default_state, action) => {
             return {
                 ...state, 
                 votes: action.payload
+            }
+        case 'CHANGE_DEPLOYMENT_STATUS':
+            return {
+                ...state, 
+                new_contract_deployed: true, 
+                new_contract_address: action.payload
             }
         default:
             return state

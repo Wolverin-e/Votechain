@@ -3,15 +3,17 @@ import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Add from './add';
 import Details from './details';
+import Deploy from './deploy';
 import { fetch_candidates } from '../actions/fetch_candidates';
 import { fetch_results } from '../actions/fetch_results';
 
 class dashboard extends Component{
 
     state = {
-        add: true,
+        add: false,
         details: false, 
-        logout: false
+        logout: false, 
+        deploy: true
     }
 
     componentDidMount() {
@@ -45,12 +47,14 @@ class dashboard extends Component{
                     <div className="title">
                         MENU
                     </div>
-                    <input type="button" id="add" onClick={(evt) => this.changeTile(evt)} value="ADD" className="sub-link sub-link-active"/>
+                    <input type="button" id="deploy" onClick={(evt) => this.changeTile(evt)} value="DEPLOY" className="sub-link sub-link-active"/>
+                    <input type="button" id="add" onClick={(evt) => this.changeTile(evt)} value="ADD" className="sub-link"/>
                     <input type="button" id="details" onClick={(evt) => this.changeTile(evt)} value="DETAILS" className="sub-link"/>
                     <input type="button" id="logout" onClick={() => this.handleLogout()} value="LOGOUT" className="sub-link"/>
                 </div>
+                { this.state.deploy?<Deploy />:true }
                 { this.state.add?<Add />:true }
-                { this.state.details?<Details />:true}
+                { this.state.details?<Details />:true }
             </div>
         )
     }

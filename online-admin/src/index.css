@@ -142,8 +142,8 @@ body {
   opacity: 0.75;
   margin-top: 8%;
   align-self: center;
-  height:100px;
-  width: 100px;
+  height:125px;
+  width: 125px;
 }
 
 /* <---STOP LOGIN-PAGE STYLING----> */
@@ -234,7 +234,157 @@ body {
 .add {
   height: 100%;
   width: 100%;
-  padding-top: 40%;
+  padding-top: 0%;
+}
+
+.add .inp {
+  position: relative;
+  margin-top: 12%;
+  background-color: rgba(0, 0, 0, 0.50);
+  border: 0px;
+  height: 8%;
+  width: 75%;
+  align-self: center;
+  text-align: center;
+  color: white;
+  border-radius: 5px;
+  transition: 500ms ease-out;
+  font-weight: bold;
+}
+
+.add .inp:hover, .add .inp:focus {
+  position: relative;
+  margin-top: 12%;
+  background-color: rgba(255, 255, 255, 0.25);
+  height: 8%;
+  width: 76%;
+  align-self: center;
+  text-align: center;
+  color: black;
+  border-radius: 5px;
+  transition: 500ms ease-out;
+  font-weight: bold;
+}
+
+.add .inp-btn {
+  position: relative;
+  margin-top: 12%;
+  background-color: rgba(0, 0, 0, 0.50);
+  border: 0px;
+  border-radius: 5px;
+  color: rgba(255, 255, 255, 0.7);
+  width: 50%;
+  height: 8%;
+  transition: 500ms;
+  font-weight: bold;
+}
+
+.add .inp-btn:hover {
+  position: relative;
+  margin-top: 12%;
+  background-color: rgba(255, 255, 255, 0.25);
+  border: 0px;
+  border-radius: 5px;
+  color: black;
+  width: 51%;
+  height: 8%;
+  transition: 500ms;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+.add .logo {
+  position: relative;
+  opacity: 0.75;
+  margin-top: 8%;
+  align-self: center;
+  height:150px;
+  width: 150px;
+}
+
+.deploy {
+  height: 100%;
+  width: 100%;
+  padding-top: 0%;
+}
+
+.deploy .inp {
+  position: relative;
+  margin-top: 12%;
+  background-color: rgba(0, 0, 0, 0.50);
+  border: 0px;
+  height: 8%;
+  width: 75%;
+  align-self: center;
+  text-align: center;
+  color: white;
+  border-radius: 5px;
+  transition: 500ms ease-out;
+  font-weight: bold;
+}
+
+.deploy .inp:hover, .deploy .inp:focus {
+  position: relative;
+  margin-top: 12%;
+  background-color: rgba(255, 255, 255, 0.25);
+  height: 8%;
+  width: 76%;
+  align-self: center;
+  text-align: center;
+  color: black;
+  border-radius: 5px;
+  transition: 500ms ease-out;
+  font-weight: bold;
+}
+
+.deploy .inp-btn {
+  position: relative;
+  margin-top: 12%;
+  background-color: rgba(0, 0, 0, 0.50);
+  border: 0px;
+  border-radius: 5px;
+  color: rgba(255, 255, 255, 0.7);
+  width: 50%;
+  height: 8%;
+  transition: 500ms;
+  font-weight: bold;
+}
+
+.deploy .inp-btn:hover {
+  position: relative;
+  margin-top: 12%;
+  background-color: rgba(255, 255, 255, 0.25);
+  border: 0px;
+  border-radius: 5px;
+  color: black;
+  width: 51%;
+  height: 8%;
+  transition: 500ms;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+.deploy .logo {
+  position: relative;
+  opacity: 0.75;
+  margin-top: 8%;
+  align-self: center;
+  height:150px;
+  width: 150px;
+}
+
+
+.results {
+  height: 100%;
+  width: 100%;
+}
+
+.results-table {
+  border-width: 0%;
+  color: white;
+  font-variant-caps: all-petite-caps;
+  font-size: larger;
+  text-align: left;
 }
 
 .results {
