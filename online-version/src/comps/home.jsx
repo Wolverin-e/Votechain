@@ -2,18 +2,16 @@ import React, { Component } from "react";
 import { Redirect } from 'react-router-dom';
 import logo from '../imgs/vote4.png';
 import DB from '../DB/db';
+import {connect} from 'react-redux';
 const crypto = require('crypto-js');
 
 class Login extends Component {
-	constructor() {
-		super();
-		this.state = {
-			username : "", 
-			pass : "", 
-			redirect: false, 
-      user: ""
-		};
-	}
+
+  state = {
+    username : "", 
+    pass : "", 
+    redirect: false
+  };
 
 	handleChange = (field, evt) => {
 		this.setState({ [field]: evt.target.value });
@@ -25,32 +23,36 @@ class Login extends Component {
         .then(device => {
           let deviceID = device.productId+''+device.vendorId;
           return deviceID;
-        })
-        .then( devID => {
+        }).then( devID => {
           DB("SELECT * FROM voters WHERE aid = '"+this.state.username+"'")
           .then(data => {
             const { qry_res } = data;
-            // console.log(qry_res);
             if ((qry_res.length) && devID === crypto.AES.decrypt(qry_res[0].dhash, this.state.pass).toString(crypto.enc.Utf8)) {
-              this.setState({user: qry_res[0], redirect:true});
+              this.props.dispatch({
+                type: "ATTACH-USER", 
+                payload: qry_res[0]
+              })
+              this.setState({redirect:true});
             } else {
               alert("PLEASE CHECK ID & PASSWORD");
-              return 0;
             }
           });
         });
     } else {
-      alert("THIS IS NOT A JOKE!");
-      return 0;
+      alert("YOU CAN ALWAYS WASTE YOUR TIME!");
     }
-	};
+  };
+  
+  componentDidMount(){
+    if(this.props.user){
+      this.setState({redirect: true});
+    }
+  }
 
   render() {
   	if(this.state.redirect) {
-      // console.log(this.state.user);
-      window.$has_voted = (this.state.user.vhash === '')?false:true;
-      return <Redirect to={{pathname:"/dashboard", state: { voter: this.state.user}}} />;
-  	}
+      return <Redirect to={{pathname:"/dashboard"}} />;
+    }
 
     return (
     	<div>
@@ -65,4 +67,8 @@ class Login extends Component {
   }
 }
 
-export default Login;
+const mapStateToProps = state => {
+  return state;
+}
+
+export default connect(mapStateToProps)(Login);

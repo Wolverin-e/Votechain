@@ -36,7 +36,7 @@ app.post('/vote', (req, res) => {
 	var items = decrypted.plaintext.split('---');
 	const taid = parseInt(items[0], 10);
 	const cid = parseInt(items[1], 10);
-	console.log(taid, cid);
+	// console.log(taid, cid);
 	const data = contract.methods.transfer_vote(taid, cid).encodeABI();
 	var vHash;
 	web3.eth.getTransactionCount(account, (err, txCount) => {
@@ -55,25 +55,32 @@ app.post('/vote', (req, res) => {
 
 		web3.eth.sendSignedTransaction(raw, (err, txHash)=>{
 			sql = "UPDATE voters SET vhash='"+txHash+"' WHERE aid='"+items[0]+"'"
-			// console.log(sql);
 			con.query(sql, (err, results, fields) => {
 				if (err) throw err;
 			})
 		}).then(()=>{
 			res.send({voted: true});
-			// console.log(items);
+		}).catch( err => {
+			res.send({voted: false, err: err});
 		});
 	});
 });
 
 app.get('/result',async (req, res) => {
-	var votes = [0, 0, 0, 0];
-	votes[0] = await contract.methods.get_votes(1).call();
-	votes[1] = await contract.methods.get_votes(2).call();
-	votes[2] = await contract.methods.get_votes(3).call();
-	votes[3] = await contract.methods.get_votes(4).call();
-	await res.send(votes);
+	var votes = await contract.methods.get_all_votes().call();
+	res.send(votes);
 });
+
+app.get('/candidates', async (req, res) => {
+	var candidates = await contract.methods.get_candidates().call();
+	res.send(candidates);
+})
+
+app.get('/all', async (req, res) => {
+	var candidates = await contract.methods.get_candidates_about().call();
+	res.send(candidates);
+})
+
 
 app.post('/', (req, res) => {
 	con.query(req.body.qry, (err, results, fields) => {

@@ -1,24 +1,22 @@
 import React, { Component } from "react";
 import bus from '../imgs/bus.png';
 import Hasher from '../HASHER/hasher';
+import {connect} from 'react-redux';
+import { fetch_results } from '../actions/fetch_results';
 
 class Vote extends Component {
 
-	constructor(){
-		super();
-		this.state = {
-			for: 1, 
-			voted: false
-		};
+	state = {
+		for: 1
 	}
 
-	handleChange = async (evt) => {
-		await this.setState({for: evt.target.value});
-		console.log(this.state);
-	};
+	handleChange = (evt) => {
+		this.setState({for: evt.target.value});
+		// console.log(this.state);
+	}
 
 	handleVote = () => {
-		if(!window.$has_voted){
+		if( (!this.props.has_voted) && this.props.user.vhash === "" ){
 			var hashed = this.props.user.aid+'---'+this.state.for
 			fetch(process.env.REACT_APP_DB_API+"/vote", {
 				method: "POST", 
@@ -30,36 +28,39 @@ class Vote extends Component {
 			}).then(res => {
 				return res.json();
 			}).then(resl => {
-				this.setState(resl);
-				window.has_voted = true;
-				alert("VOTED SUCCESSFULLY");
+				if(resl.voted){
+					this.props.dispatch(fetch_results());
+					this.props.dispatch({
+						type: "SET-VOTED"
+					})
+					alert("VOTED SUCCESSFULLY");
+				} else {
+					alert("TRY AGAIN IN SOME TIME");
+					console.log(resl.err);
+				}
 			});
 		} else {
-			alert("😏😑 Already Voted go back to enjoying yourself!");
+			alert("😏😑 You have already Voted go back to enjoying yourself!");
 		}
 	};
 
-	componentDidMount() {
-		if(this.props.vhash) {
-			this.setState({voted: true});
-		}
-	}
-
 	render() {
 		return(
-			<div className="dashboard2">
+			<div className="dashboard2 vote">
 				<img src={bus} className="logo" alt="img"/>
 				<h3 className="vote-h3">CAST YOUR VOTE</h3>
 				<select onChange={(evt) => this.handleChange(evt)} className="drp-dwn">
-					<option value="1">MODI</option>
-					<option value="2">PAPPU</option>
-					<option value="3">KEJRIWAL</option>
-					<option value="4">MAMTA</option>
+					{this.props.candidates.map((x, i) => <option key={i} value={i+1}>{x}</option>)}
 				</select>
-				<input type="button" className="inp-btn" onClick={() => this.handleVote()} value="VOTE" disabled={this.state.voted}/>
+				<div className="about"> {this.props.about_candidates[this.state.for-1]} </div>
+				<input type="button" className="inp-btn" onClick={() => this.handleVote()} value="VOTE" disabled={this.props.has_voted}/>
 			</div>
 		);
 	}
 }
 
-export default Vote;
+const mapStateToProps = state => {
+	return state;
+}
+
+export default connect(mapStateToProps)(Vote);

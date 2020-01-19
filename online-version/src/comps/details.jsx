@@ -1,15 +1,8 @@
 import React, { Component } from "react";
+import {connect} from 'react-redux';
+import { fetch_results } from "../actions/fetch_results";
 
 class Details extends Component {
-
-	constructor(){
-		super();
-		this.state = {
-			votes: [0, 0, 0, 0], 
-			cands: ['MODI', 'PAPPU', 'KEJRIWAL', 'MAMTA'], 
-			stage: [0, 1, 2, 3]
-		};
-	};
 
 	componentDidMount(){
 		fetch(process.env.REACT_APP_DB_API+"/result", {
@@ -31,11 +24,29 @@ class Details extends Component {
 		return(
 			<div className="dashboard2">
 				<div className="results">
-				{this.state.stage.map(x => <h5 key={x}>{this.state.cands[x]}:{this.state.votes[x]}</h5>)}
+					<div className="results">
+						<table className="results-table">
+							{(this.props.candidates.length)?(
+								this.props.candidates.map( (x, i) => (
+									<tbody key={x}>
+										<tr className="results-tr" key={i}>
+											<td className="results-td-left">{x}</td>
+											<td className="results-td-right">{this.props.results[i]}</td>
+										</tr>
+									</tbody>
+								))
+							):<tbody><tr><td>{"LOADING"}</td></tr></tbody>}
+						</table>
+					</div>
 				</div>
+				<input type="button" className="inp-btn" onClick={() => this.props.dispatch(fetch_results())} value="RELOAD"/>
 			</div>
 		);
 	}
 }
 
-export default Details;
+const mapStateToProps = state => {
+	return state;
+}
+
+export default connect(mapStateToProps)(Details);

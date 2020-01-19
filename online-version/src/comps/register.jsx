@@ -20,7 +20,6 @@ class Register extends Component {
 	handleChange = (field, evt) => {
 		this.setState({ [field]: evt.target.value });
 		// console.log(this.state)
-
 	};
 
 	handleSigner = (evt) => {
@@ -36,26 +35,51 @@ class Register extends Component {
 		}
 	};
 
-	handleSubmit =async () => {
-		const device = this.state.deviceID;
-		const pin = this.state.pin;
-		await this.setState({deviceID: crypto.AES.encrypt(device, pin).toString()});
-		console.log(this.state.deviceID);
-		// eslint-disable-next-line
-		var sql = "INSERT INTO voters (aid, name, email, number, vhash, dhash) VALUES ("+this.state.aid+", '"+this.state.name+"', '"+this.state.email+"', "+this.state.number+', '+"'', '"+this.state.deviceID+"')";
-		// console.log(sql);
-		var validation_sql = "SELECT aid FROM voters WHERE aid="+this.state.aid;
-		DB(validation_sql).then(res => {
-			if(!res.qry_res.length) {
-				DB(sql).then(resp => {
-					console.log(resp);
-					alert('SUBMITTED!');
-				});
-			} else {
-				alert('ALREADY REGISTERED!');
-			};
-		});
+	handleSubmit = async () => {
+		if(this.checkform()){
+			const device = this.state.deviceID;
+			const pin = this.state.pin;
+			await this.setState({deviceID: crypto.AES.encrypt(device, pin).toString()});
+			// eslint-disable-next-line
+			var sql = "INSERT INTO voters (aid, name, email, number, vhash, dhash) VALUES ("+this.state.aid+", '"+this.state.name+"', '"+this.state.email+"', "+this.state.number+', '+"'', '"+this.state.deviceID+"')";
+			var validation_sql = "SELECT aid FROM voters WHERE aid="+this.state.aid;
+			DB(validation_sql).then(res => {
+				if(!res.qry_res.length) {
+					DB(sql).then(resp => {
+						// console.log(resp);
+						alert('SUBMITTED!');
+					});
+				} else {
+					alert('ALREADY REGISTERED!');
+				};
+			});
+		}
 	};
+
+	checkform = () => {
+		var errs = []
+		if(! /^[1-9][0-9]{15}$/.test(this.state.aid)){
+			errs.push("PLEASE ENTER VALID AADHAR ID!");
+		}
+		if(! /^[A-Za-z0-9]+@([A-Za-z]+.)+[A-Za-z]+$/.test(this.state.email)){
+			errs.push("PLEASE ENTER VALID EMAIL ID!");
+		}
+
+		if(! /^[A-Za-z]+ ?[A-Za-z]*$/.test(this.state.name)){
+			errs.push("PLEASE ENTER VALID NAME!");
+		}
+
+		if(! /^[1-9][0-9]{9}$/.test(this.state.number)){
+			errs.push("PLEASE ENTER 10 DIGIT NUMBER!");
+		}
+
+		if(errs.length){
+			alert(errs.join("\n"));
+			return false;
+		} else {
+			return true;
+		}
+	}
 
 	render() {
 		return(

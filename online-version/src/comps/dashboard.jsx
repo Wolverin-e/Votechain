@@ -2,17 +2,15 @@ import React, { Component } from "react";
 import Vote from './vote';
 import Details from './details';
 import { Redirect } from 'react-router-dom';
+import {connect} from 'react-redux';
+import fetch_all from '../actions/fetch_all';
 
 class DashboardSidebar extends Component {
 
-	constructor() {
-
-		super();
-		this.state = {
-			vote: true,
-			details: false, 
-			logout: false
-		}
+	state = {
+		vote: true,
+		details: false, 
+		logout: false
 	}
 
 	changeTile = async (evt) => {
@@ -28,8 +26,19 @@ class DashboardSidebar extends Component {
 		}
 	};
 
+	componentDidMount = () => {
+		if(this.props.user){
+			this.props.dispatch(fetch_all());
+		} else {
+			this.handleLogout();
+			// console.log("logging out!");
+		}
+	}
 
 	handleLogout = () => {
+		this.props.dispatch({
+			type:"HANDLE-LOGOUT"
+		});
 		this.setState({logout: true});
 	};
 
@@ -47,11 +56,15 @@ class DashboardSidebar extends Component {
 				<input type="button" id="details" onClick={(evt) => this.changeTile(evt)} value="DETAILS" className="sub-link"/>
 				<input type="button" id="logout" onClick={() => this.handleLogout()} value="LOGOUT" className="sub-link"/>
 			</div>
-			{ this.state.vote?<Vote user={this.props.location.state.voter}/>:true }
+			{ this.state.vote?<Vote />:true }
 			{ this.state.details?<Details />:true }
 			</div>
 		);
 	}
 }
 
-export default DashboardSidebar;
+const mapStateToProps = state => {
+	return state;
+}
+
+export default connect(mapStateToProps)(DashboardSidebar);
