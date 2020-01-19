@@ -66,19 +66,25 @@ app.post('/vote', (req, res) => {
 	});
 });
 
+var votes, all;
+const api_call = async () => {
+	all = await contract.methods.get_candidates_about().call();
+	votes = all.map(x => x[1]);
+	// console.log(all, votes);
+}
+
+api_call();
+
+setInterval(()=>{
+	api_call();
+}, Number(process.env.REACT_APP_DB_API_REFRESH_TIME))
+
 app.get('/result',async (req, res) => {
-	var votes = await contract.methods.get_all_votes().call();
 	res.send(votes);
 });
 
-app.get('/candidates', async (req, res) => {
-	var candidates = await contract.methods.get_candidates().call();
-	res.send(candidates);
-})
-
 app.get('/all', async (req, res) => {
-	var candidates = await contract.methods.get_candidates_about().call();
-	res.send(candidates);
+	res.send(all);
 })
 
 
