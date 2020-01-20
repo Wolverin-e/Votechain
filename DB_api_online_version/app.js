@@ -54,6 +54,7 @@ app.post('/vote', (req, res) => {
 		const raw = '0x'+serializedTx.toString('hex');
 
 		web3.eth.sendSignedTransaction(raw, (err, txHash)=>{
+			console.log(txHash);
 			sql = "UPDATE voters SET vhash='"+txHash+"' WHERE aid='"+items[0]+"'"
 			con.query(sql, (err, results, fields) => {
 				if (err) throw err;
@@ -69,7 +70,7 @@ app.post('/vote', (req, res) => {
 var votes, all;
 const api_call = async () => {
 	all = await contract.methods.get_candidates_about().call();
-	votes = all.map(x => x[1]);
+	votes = all.map(x => x[2]);
 	// console.log(all, votes);
 }
 

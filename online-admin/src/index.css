@@ -413,5 +413,16 @@ body {
   padding: 4% 3% 4% 20%;
 }
 
+.receipt{
+  padding-top: 30%;
+  height: 100%;
+  width: 100%;
+}
+
+.receipt .rcpttxt{
+  margin: 10%;
+  color: white;
+  height: 30%;
+}
 
 /* <---STOP DASHBOARD STYLING----> */

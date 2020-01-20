@@ -1,5 +1,5 @@
 let default_state = {
-    user: {}, 
+    user: false, 
     new_contract_deployed: false, 
     new_contract_address: ""
 }
@@ -44,6 +44,10 @@ const reducers = (state = default_state, action) => {
                 ...state, 
                 new_contract_deployed: true, 
                 new_contract_address: action.payload
+            }
+        case 'HANDLE-LOGOUT':
+            return {
+                ...default_state
             }
         default:
             return state

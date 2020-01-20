@@ -17,6 +17,10 @@ export function fetch_results() {
                 type: "ATTACH-RESULTS", 
                 payload: resl
             })
+        }).catch( err => {
+            return dispatch({
+                type: 'ATTACH-RESULTS-ERR'
+            })
         })
     }
 }

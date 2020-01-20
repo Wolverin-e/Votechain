@@ -16,6 +16,10 @@ export function fetch_candidates() {
                 type: 'ATTACH-CANDIDATES', 
                 payload: resl
             })
+        }).catch(err => {
+            return dispatch({
+                type: 'ATTACH-CANDIDATES-ERR'
+            })
         })
     }
 }

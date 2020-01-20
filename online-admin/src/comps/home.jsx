@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import logo from '../imgs/vote4.png';
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
-// import DB from '../DB/db';
+import DB from '../DB/db';
 
 class Home extends Component{
 
@@ -16,16 +16,20 @@ class Home extends Component{
     }
 
     setRedirect = () => {
-        // DB("SELECT * FROM admins WHERE username = '"+this.state.username+"'")
-        // .then( res => {
-        //     const {qry_res} = res;
-        //     // console.log(qry_res);
-        //     if(qry_res[0].password === this.state.pass){
-        //         this.setState({redirect: true});
-        //     }
-        // })
-        this.props.dispatch({type:"LOGIN-SUCCESSFUL", payload:{id:"0", username:"alpha", password:"Beta"}})
-        this.setState({redirect: true});
+        DB("SELECT * FROM admins WHERE username = '"+this.state.username+"'")
+        .then( res => {
+            const {qry_res} = res;
+            // console.log(qry_res);
+            if(qry_res[0].password === this.state.pass){
+                this.setState({redirect: true});
+                this.props.dispatch({
+                    type: "LOGIN-SUCCESSFUL", 
+                    payload: qry_res[0]
+                })
+            }
+        })
+        // this.props.dispatch({type:"LOGIN-SUCCESSFUL", payload:{id:"0", username:"alpha", password:"Beta"}})
+        // this.setState({redirect: true});
     }
 
     handleChange = (field, evt) => {

@@ -15,7 +15,7 @@ const web3 = new Web3(new Web3.providers.HttpProvider(url));
 const address = process.env.REACT_APP_CONTRACT_ADDRESS;
 const abi = JSON.parse(process.env.REACT_APP_CONTRACT_ABI);
 const account = process.env.REACT_APP_ACCOUNT;
-const priv_key = Buffer.from(process.env.REACT_APP_ACCOUNT_PRIVATE_KEY, 'hex');
+// const priv_key = Buffer.from(process.env.REACT_APP_ACCOUNT_PRIVATE_KEY, 'hex');
 const contract = new web3.eth.Contract(abi, address);
 //////////////////////////////////////
 
@@ -34,28 +34,35 @@ app.use(express.json());
 app.post('/add', (req, res) => {
 	var decrypted_name = cryptico.decrypt(req.body.add, key).plaintext;
 	var decrypted_about = cryptico.decrypt(req.body.about, key).plaintext;
-	const data = contract.methods.add_candidate(decrypted_name, decrypted_about).encodeABI();
-	web3.eth.getTransactionCount(account, (err, txCount) => {
-		const txObject = {
-			nonce: web3.utils.toHex(txCount), 
-			gasLimit: web3.utils.toHex(800000), 
-			gasPrice: web3.utils.toHex(web3.utils.toWei('10', 'gwei')),
-			to: address, 
-			data: data
-		}
-
-		const tx = new Txs(txObject);
-		tx.sign(priv_key);
-		const serializedTx = tx.serialize();
-		const raw = '0x'+serializedTx.toString('hex');
-
-		web3.eth.sendSignedTransaction(raw, (err, txHash)=>{
+	contract.methods.add_candidate(decrypted_name, decrypted_about).send({ 
+		from: account, 
+		gasLimit: web3.utils.toHex(800000), 
+		gasPrice: web3.utils.toHex(web3.utils.toWei('10', 'gwei'))
+	}).on('confirmation', (confirmation_number, receipt) => {
+		if(confirmation_number < 2){
 			console.log("ADDED CANDIDATE: "+decrypted_name);
-		}).then(()=>{
 			res.send({added: true});
-		});
-	});
+		}
+	}).on('err', err => {
+		res.send({added: false});
+	})
 });
+
+app.post('/getReceipt', async (req, res) => {
+	var transaction_hash = await cryptico.decrypt(req.body.txHash, key).plaintext;
+	console.log("txh", transaction_hash);
+	// web3.eth.getTransaction(transaction_hash, tx => {
+	// 	console.log("sent", tx)
+	// 	res.send({status:true, receipt: tx});
+	// }).catch(err => {
+	// 	res.send({status: false})
+	// })
+	web3.eth.getTransaction(transaction_hash).then(tx => {
+		res.send({status:true, receipt: tx});
+	}).catch(err => {
+		res.send({status: false})
+	})
+})
 
 app.post('/deploy', (req, res) => {
 	const _deployer = cryptico.decrypt(req.body.deployer, key).plaintext;
@@ -71,7 +78,7 @@ app.post('/deploy', (req, res) => {
 		data: data, 
 		arguments: [_deployer]
 	}).send().on('receipt', receipt => {
-		console.log("NEW CONTRACT: "+receipt.contractAddress);
+		console.log("NEW CONTRACT: "+receipt.contractAddress+"\n"+receipt.transactionHash);
 		res.send({contract_address: receipt.contractAddress});
 	})
 });

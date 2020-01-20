@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import Add from './add';
 import Details from './details';
 import Deploy from './deploy';
+import Receipt from './receipt';
 import { fetch_candidates } from '../actions/fetch_candidates';
 import { fetch_results } from '../actions/fetch_results';
 
@@ -13,7 +14,8 @@ class dashboard extends Component{
         add: false,
         details: false, 
         logout: false, 
-        deploy: true
+        deploy: true, 
+        receipt: false
     }
 
     componentDidMount() {
@@ -35,6 +37,15 @@ class dashboard extends Component{
     
     handleLogout = () => {
         this.setState({logout: true});
+        this.props.dispatch({
+            type: "HANDLE-LOGOUT"
+        })
+    }
+
+    componentDidMount = () => {
+        if(! this.props.user){
+            this.handleLogout();
+        }
     }
 
     render(){
@@ -48,11 +59,13 @@ class dashboard extends Component{
                         MENU
                     </div>
                     <input type="button" id="deploy" onClick={(evt) => this.changeTile(evt)} value="DEPLOY" className="sub-link sub-link-active"/>
+                    <input type="button" id="receipt" onClick={(evt) => this.changeTile(evt)} value="RECEIPT" className="sub-link"/>
                     <input type="button" id="add" onClick={(evt) => this.changeTile(evt)} value="ADD" className="sub-link"/>
                     <input type="button" id="details" onClick={(evt) => this.changeTile(evt)} value="DETAILS" className="sub-link"/>
                     <input type="button" id="logout" onClick={() => this.handleLogout()} value="LOGOUT" className="sub-link"/>
                 </div>
                 { this.state.deploy?<Deploy />:true }
+                { this.state.receipt?<Receipt />:true }
                 { this.state.add?<Add />:true }
                 { this.state.details?<Details />:true }
             </div>
