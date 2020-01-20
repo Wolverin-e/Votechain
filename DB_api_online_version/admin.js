@@ -50,13 +50,7 @@ app.post('/add', (req, res) => {
 
 app.post('/getReceipt', async (req, res) => {
 	var transaction_hash = await cryptico.decrypt(req.body.txHash, key).plaintext;
-	console.log("txh", transaction_hash);
-	// web3.eth.getTransaction(transaction_hash, tx => {
-	// 	console.log("sent", tx)
-	// 	res.send({status:true, receipt: tx});
-	// }).catch(err => {
-	// 	res.send({status: false})
-	// })
+	// console.log("txh", transaction_hash);
 	web3.eth.getTransaction(transaction_hash).then(tx => {
 		res.send({status:true, receipt: tx});
 	}).catch(err => {
