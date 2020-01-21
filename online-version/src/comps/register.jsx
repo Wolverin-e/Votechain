@@ -89,6 +89,10 @@ class Register extends Component {
 			errs.push("PLEASE ENTER 10 DIGIT NUMBER!");
 		}
 
+		if(! /^[A-Za-z0-9]{4,}$/.test(this.state.pin)){
+			errs.push("PLEASE ENTER A PIN OF ATLEAST 4 CHARACTERS!")
+		}
+
 		if(! this.state.device){
 			errs.push("PLEASE CONNECT SIGNER!");
 		}

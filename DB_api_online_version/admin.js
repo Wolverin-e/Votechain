@@ -5,31 +5,41 @@ const fs = require('fs');
 
 ////////////////////////////////////// ENCRYPTION
 const cryptico = require("cryptico-js");
-const key = cryptico.generateRSAKey(process.env.REACT_APP_API_PRIVATE_KEY, process.env.REACT_APP_API_ENCRYPTION_LEVEL);
+const key = cryptico.generateRSAKey(process.env.SUB_TLS_RSA_PRIVATE_KEY, Number(process.env.SUB_TLS_RSA_ENCRYPTION_LEVEL));
 
 ///////////////////////////////////// WEB3
 const Web3 = require('web3');
-var Txs = require('ethereumjs-tx').Transaction;
-const url = process.env.REACT_APP_RPC;
+const url = process.env.RPC_URL;
 const web3 = new Web3(new Web3.providers.HttpProvider(url));
-const address = process.env.REACT_APP_CONTRACT_ADDRESS;
-const abi = JSON.parse(process.env.REACT_APP_CONTRACT_ABI);
-const account = process.env.REACT_APP_ACCOUNT;
-// const priv_key = Buffer.from(process.env.REACT_APP_ACCOUNT_PRIVATE_KEY, 'hex');
+const address = process.env.CONTRACT_ADDRESS;
+const abi = JSON.parse(process.env.CONTRACT_ABI);
+const account = process.env.ETH_ACCOUNT;
+// const priv_key = Buffer.from(process.env.ACCOUNT_PRIVATE_KEY.slice(2), 'hex');
 const contract = new web3.eth.Contract(abi, address);
 //////////////////////////////////////
 
 
 const con = mysql.createConnection({
-	host: process.env.REACT_APP_DB_HOST, 
-	user: process.env.REACT_APP_DB_USER, 
-	password: process.env.REACT_APP_DB_PASSWORD, 
-	database: process.env.REACT_APP_DB_DATABASE_NAME
+	host: process.env.DB_HOST, 
+	user: process.env.DB_USER, 
+	password: process.env.DB_PASSWORD, 
+	database: process.env.DB_DATABASE_NAME
 });
 con.connect();
 
 const app = express();
 app.use(express.json());
+
+var allowed_methods = ['GET', 'POST'];
+
+app.use((req, res, next) => {
+	if( allowed_methods.includes(req.method) ){
+		console.log(req.ip)
+		next()
+	} else {
+		res.status(405).send("HAHA NICE TRY!");
+	}
+});
 
 app.post('/add', (req, res) => {
 	var decrypted_name = cryptico.decrypt(req.body.add, key).plaintext;
@@ -60,7 +70,7 @@ app.post('/getReceipt', async (req, res) => {
 
 app.post('/deploy', (req, res) => {
 	const _deployer = cryptico.decrypt(req.body.deployer, key).plaintext;
-	const data = process.env.REACT_APP_CONTRACT_DATA;
+	const data = process.env.CONTRACT_DATA;
 
 	votechainContract = new web3.eth.Contract(abi, {
 		from: account, 
@@ -100,8 +110,8 @@ app.post('/', (req, res) => {
 });
 
 https.createServer({
-	key: fs.readFileSync('srvr.key'), 
-	cert: fs.readFileSync('srvr.cert')
+	key: fs.readFileSync(process.env.SSL_CERT_PATH+'srvr.key'), 
+	cert: fs.readFileSync(process.env.SSL_CERT_PATH+'srvr.cert')
 }, app).listen(process.env.REACT_APP_ADMIN_API_PORT, () => {
 	console.log("Started on "+process.env.REACT_APP_ADMIN_API_PORT+" over HTTPS only!");
 })

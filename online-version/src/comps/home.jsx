@@ -18,7 +18,7 @@ class Login extends Component {
 	};
 
 	setRedirect = () => {
-    if( (this.state.username.length === 16) && (this.state.pass.length !== 0)){
+    if( (/^[1-9][0-9]{15}$/.test(this.state.username)) && (/^[A-Za-z0-9]{4,}$/.test(this.state.pass))){
       navigator.usb.requestDevice({ filters: [] })
         .then(device => {
           let deviceID = device.productId+''+device.vendorId;
