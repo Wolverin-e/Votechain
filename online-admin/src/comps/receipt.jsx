@@ -36,7 +36,7 @@ class Check extends Component {
             <div className="dashboard2">
                 <div className="receipt">
                 <input type="text" id="txHash" className="inp" onChange={evt => this.handleChange(evt.target.value)} placeholder="txHash"/>
-                <input type="button" className="inp-btn" onClick={() => this.handleGet()} value="ADD"/>
+                <input type="button" className="inp-btn" onClick={() => this.handleGet()} value="GET RECEIPT"/>
                 {this.state.receipt?<div className="rcpttxt">LOGGED IN CONSOLE</div>:true}
                 </div>
             </div>

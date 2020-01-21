@@ -18,9 +18,12 @@ class dashboard extends Component{
         receipt: false
     }
 
-    componentDidMount() {
+    componentDidMount = () => {
         this.props.dispatch(fetch_candidates());
         this.props.dispatch(fetch_results());
+        if(! this.props.user){
+            this.handleLogout();
+        }
     }
     
     changeTile = async (evt) => {
@@ -40,12 +43,6 @@ class dashboard extends Component{
         this.props.dispatch({
             type: "HANDLE-LOGOUT"
         })
-    }
-
-    componentDidMount = () => {
-        if(! this.props.user){
-            this.handleLogout();
-        }
     }
 
     render(){

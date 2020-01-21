@@ -31,7 +31,7 @@ class navbar extends Component {
                 VOTECHAIN
             </li>
             <li className="nav-item active">
-              <Link to="/" className="nav-link">
+              <Link id="homelink" to="/" className="nav-link">
                 <b>Home</b>
               </Link>
             </li>

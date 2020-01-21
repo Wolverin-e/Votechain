@@ -3,7 +3,8 @@ let default_state = {
     has_voted: false, 
     candidates: [], 
     about_candidates: [], 
-    results: []
+    results: [], 
+    registered_for: false
 }
 
 const reducers = (state = default_state, action) => {
@@ -35,6 +36,11 @@ const reducers = (state = default_state, action) => {
             return {
                 ...state, 
                 results: action.payload
+            }
+        case "ATTACH-REGISTERED-USER":
+            return{
+                ...state, 
+                registered_for: action.payload
             }
         case "HANDLE-LOGOUT":
             return {

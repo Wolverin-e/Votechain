@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import DB from '../DB/db';
+import {connect} from 'react-redux';
 var crypto = require("crypto-js");
 
 class Register extends Component {
@@ -21,6 +22,15 @@ class Register extends Component {
 		this.setState({ [field]: evt.target.value });
 		// console.log(this.state)
 	};
+
+	copyToClipboard = txt => {
+        var txtField = document.createElement('textarea');
+        txtField.innerText = txt;
+        document.body.appendChild(txtField);
+        txtField.select();
+        document.execCommand('copy');
+        txtField.remove();
+    }
 
 	handleSigner = (evt) => {
 		var elem = evt.target;
@@ -47,7 +57,13 @@ class Register extends Component {
 				if(!res.qry_res.length) {
 					DB(sql).then(resp => {
 						// console.log(resp);
-						alert('SUBMITTED!');
+						this.copyToClipboard(this.state.aid);
+						alert('REGISTERED!\n COPIED AAADHAR ID TO YOUR CLIPBOARD!');
+						this.props.dispatch({
+							type: "ATTACH-REGISTERED-USER", 
+							payload: this.state.aid
+						})
+						document.getElementById('homelink').click();
 					});
 				} else {
 					alert('ALREADY REGISTERED!');
@@ -71,6 +87,10 @@ class Register extends Component {
 
 		if(! /^[1-9][0-9]{9}$/.test(this.state.number)){
 			errs.push("PLEASE ENTER 10 DIGIT NUMBER!");
+		}
+
+		if(! this.state.device){
+			errs.push("PLEASE CONNECT SIGNER!");
 		}
 
 		if(errs.length){
@@ -98,4 +118,4 @@ class Register extends Component {
 	}
 }
 
-export default Register;
+export default connect()(Register);

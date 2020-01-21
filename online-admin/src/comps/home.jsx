@@ -21,20 +21,24 @@ class Home extends Component{
             const {qry_res} = res;
             // console.log(qry_res);
             if(qry_res[0].password === this.state.pass){
-                this.setState({redirect: true});
                 this.props.dispatch({
                     type: "LOGIN-SUCCESSFUL", 
                     payload: qry_res[0]
                 })
+                this.setState({redirect: true});
             }
         })
-        // this.props.dispatch({type:"LOGIN-SUCCESSFUL", payload:{id:"0", username:"alpha", password:"Beta"}})
-        // this.setState({redirect: true});
     }
 
     handleChange = (field, evt) => {
 		this.setState({ [field]: evt.target.value });
-	};
+    };
+    
+    componentDidMount(){
+        if(this.props.user){
+            this.setState({redirect: true})
+        }
+    }
 
     render(){
 

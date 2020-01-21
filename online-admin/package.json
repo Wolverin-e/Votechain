@@ -20,7 +20,7 @@
     "redux-thunk": "^2.3.0"
   },
   "scripts": {
-    "start": "PORT=3003 ./node_modules/.bin/env-cmd -f ../.env react-scripts start",
+    "start": "PORT=3003 ./node_modules/.bin/env-cmd -r ../.env.rc.json -e client,server react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

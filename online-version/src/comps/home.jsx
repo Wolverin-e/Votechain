@@ -6,7 +6,7 @@ import {connect} from 'react-redux';
 const crypto = require('crypto-js');
 
 class Login extends Component {
-
+  
   state = {
     username : "", 
     pass : "", 
@@ -46,6 +46,9 @@ class Login extends Component {
   componentDidMount(){
     if(this.props.user){
       this.setState({redirect: true});
+    } else if(this.props.registered_for) {
+      document.getElementById('uname').value = this.props.registered_for;
+      this.setState({username: this.props.registered_for})
     }
   }
 
@@ -58,7 +61,7 @@ class Login extends Component {
     	<div>
     		<form className="login">
     		<img src={logo} className="logo" alt="Logo"/>
-    		<input type="text" placeholder="USERNAME" onChange={(evt) => this.handleChange("username", evt)} className="inp" />
+    		<input type="text" id="uname" placeholder="USERNAME" onChange={(evt) => this.handleChange("username", evt)} className="inp" />
     		<input type="password" placeholder="PASSWORD" onChange={(evt) => this.handleChange("pass", evt)} className="inp" />
     		<input type="button" value="CRUNCH" className="inp-btn" onClick={this.setRedirect} />
     		</form>

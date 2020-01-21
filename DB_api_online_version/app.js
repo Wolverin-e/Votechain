@@ -5,7 +5,7 @@ const fs = require('fs');
 
 ////////////////////////////////////// ENCRYPTION
 const cryptico = require("cryptico-js");
-const key = cryptico.generateRSAKey(process.env.REACT_APP_API_PRIVATE_KEY, process.env.REACT_APP_API_ENCRYPTION_LEVEL);
+const key = cryptico.generateRSAKey(process.env.REACT_APP_API_PRIVATE_KEY, Number(process.env.REACT_APP_API_ENCRYPTION_LEVEL));
 
 ///////////////////////////////////// WEB3
 const Web3 = require('web3');
@@ -36,42 +36,31 @@ app.post('/vote', (req, res) => {
 	var items = decrypted.plaintext.split('---');
 	const taid = parseInt(items[0], 10);
 	const cid = parseInt(items[1], 10);
-	// console.log(taid, cid);
-	const data = contract.methods.transfer_vote(taid, cid).encodeABI();
-	var vHash;
-	web3.eth.getTransactionCount(account, (err, txCount) => {
-		const txObject = {
-			nonce: web3.utils.toHex(txCount), 
-			gasLimit: web3.utils.toHex(800000), 
-			gasPrice: web3.utils.toHex(web3.utils.toWei('10', 'gwei')),
-			to: address, 
-			data: data
-		}
-
-		const tx = new Tx(txObject);
-		tx.sign(priv_key);
-		const serializedTx = tx.serialize();
-		const raw = '0x'+serializedTx.toString('hex');
-
-		web3.eth.sendSignedTransaction(raw, (err, txHash)=>{
-			console.log(txHash);
-			sql = "UPDATE voters SET vhash='"+txHash+"' WHERE aid='"+items[0]+"'"
-			con.query(sql, (err, results, fields) => {
-				if (err) throw err;
-			})
-		}).then(()=>{
-			res.send({voted: true});
-		}).catch( err => {
-			res.send({voted: false, err: err});
-		});
-	});
+	contract.methods.transfer_vote(taid, cid).send({
+		from: account, 
+		gasLimit: web3.utils.toHex(800000), 
+		gasPrice: web3.utils.toHex(web3.utils.toWei('10', 'gwei'))
+	}).on('receipt', receipt => {
+		// console.log(receipt);
+		sql = "UPDATE voters SET vhash='"+receipt.transactionHash+"' WHERE aid='"+items[0]+"'"
+		con.query(sql, (err, results, fields) => {
+			if (err) {
+				res.send({voted: false, err: err})
+				throw err;
+			} else {
+				res.send({voted: true});
+			}
+		})
+	}).catch(err => {
+		res.send({voted: false, err: err})
+	})
 });
 
 var votes, all;
 const api_call = async () => {
 	all = await contract.methods.get_candidates_about().call();
 	votes = all.map(x => x[2]);
-	// console.log(all, votes);
+	// console.log(votes);
 }
 
 api_call();
