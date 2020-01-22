@@ -3,6 +3,7 @@ import { Redirect } from 'react-router-dom';
 import logo from '../imgs/vote4.png';
 import DB from '../DB/db';
 import {connect} from 'react-redux';
+import Hasher from "../HASHER/hasher";
 const crypto = require('crypto-js');
 
 class Login extends Component {
@@ -24,25 +25,36 @@ class Login extends Component {
           let deviceID = device.productId+''+device.vendorId;
           return deviceID;
         }).then( devID => {
-          DB("SELECT * FROM voters WHERE aid = '"+this.state.username+"'")
-          .then(data => {
-            const { qry_res } = data;
-            if ((qry_res.length) && devID === crypto.AES.decrypt(qry_res[0].dhash, this.state.pass).toString(crypto.enc.Utf8)) {
+          fetch(process.env.REACT_APP_DB_API+"/login", {
+            method: "POST", 
+            body: JSON.stringify({
+              username: Hasher(this.state.username).cipher, 
+              password: Hasher(this.state.pass).cipher
+            }), 
+            headers: {
+              'Accept': 'application/json', 
+              'Content-Type': 'application/json', 
+              'api_key': process.env.REACT_APP_DB_API_ACCESS_KEY
+            }
+          })
+          .then(res => res.json())
+          .then(resl => {
+            if(resl.succeed && (resl.usr.dhash === devID)){
               this.props.dispatch({
                 type: "ATTACH-USER", 
-                payload: qry_res[0]
+                payload: resl.usr
               })
               this.setState({redirect:true});
             } else {
               alert("PLEASE CHECK ID & PASSWORD");
             }
-          });
+          })
         });
     } else {
       alert("YOU CAN ALWAYS WASTE YOUR TIME!");
     }
   };
-  
+
   componentDidMount(){
     if(this.props.user){
       this.setState({redirect: true});

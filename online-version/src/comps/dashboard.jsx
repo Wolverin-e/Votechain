@@ -28,7 +28,7 @@ class DashboardSidebar extends Component {
 
 	componentDidMount = () => {
 		if(this.props.user){
-			this.props.dispatch(fetch_all());
+			this.props.dispatch(fetch_all(this.props.user.tkn, this.props.user.rtkn));
 		} else {
 			this.handleLogout();
 			// console.log("logging out!");

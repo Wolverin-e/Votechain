@@ -30,16 +30,16 @@ con.connect();
 const app = express();
 app.use(express.json());
 
-var allowed_methods = ['GET', 'POST'];
+// var allowed_methods = ['GET', 'POST'];
 
-app.use((req, res, next) => {
-	if( allowed_methods.includes(req.method) ){
-		console.log(req.ip)
-		next()
-	} else {
-		res.status(405).send("HAHA NICE TRY!");
-	}
-});
+// app.use((req, res, next) => {
+// 	if( allowed_methods.includes(req.method) ){
+// 		console.log(req.ip)
+// 		next()
+// 	} else {
+// 		res.status(405).send("HAHA NICE TRY!");
+// 	}
+// });
 
 app.post('/add', (req, res) => {
 	var decrypted_name = cryptico.decrypt(req.body.add, key).plaintext;
