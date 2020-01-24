@@ -3,6 +3,7 @@ import bus from '../imgs/bus.png';
 import Hasher from '../HASHER/hasher';
 import {connect} from 'react-redux';
 import { fetch_results } from '../actions/fetch_results';
+import attach_tkn from '../actions/attach_tkn';
 
 class Vote extends Component {
 
@@ -22,10 +23,12 @@ class Vote extends Component {
 				method: "POST", 
 				body: JSON.stringify({vhash: Hasher(hashed).cipher}), 
 				headers: {
-					'Accept': 'application/json', 
-					'Content-Type': 'application/json'
+					'api_key': process.env.REACT_APP_DB_API_ACCESS_KEY, 
+					'api_auth_key': this.props.user.tkn, 
+					'api_auth_refresh_key': this.props.user.rtkn
 				}
 			}).then(res => {
+				this.props.dispatch(attach_tkn(res));
 				return res.json();
 			}).then(resl => {
 				if(resl.voted){

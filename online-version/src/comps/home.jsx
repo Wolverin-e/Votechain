@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Redirect } from 'react-router-dom';
 import logo from '../imgs/vote4.png';
-import DB from '../DB/db';
 import {connect} from 'react-redux';
 import Hasher from "../HASHER/hasher";
 const crypto = require('crypto-js');
@@ -21,35 +20,39 @@ class Login extends Component {
 	setRedirect = () => {
     if( (/^[1-9][0-9]{15}$/.test(this.state.username)) && (/^[A-Za-z0-9]{4,}$/.test(this.state.pass))){
       navigator.usb.requestDevice({ filters: [] })
-        .then(device => {
-          let deviceID = device.productId+''+device.vendorId;
-          return deviceID;
-        }).then( devID => {
-          fetch(process.env.REACT_APP_DB_API+"/login", {
-            method: "POST", 
-            body: JSON.stringify({
-              username: Hasher(this.state.username).cipher, 
-              password: Hasher(this.state.pass).cipher
-            }), 
-            headers: {
-              'Accept': 'application/json', 
-              'Content-Type': 'application/json', 
-              'api_key': process.env.REACT_APP_DB_API_ACCESS_KEY
-            }
-          })
-          .then(res => res.json())
-          .then(resl => {
-            if(resl.succeed && (resl.usr.dhash === devID)){
-              this.props.dispatch({
-                type: "ATTACH-USER", 
-                payload: resl.usr
-              })
-              this.setState({redirect:true});
-            } else {
-              alert("PLEASE CHECK ID & PASSWORD");
-            }
-          })
-        });
+      .then(device => {
+        let deviceID = device.productId+''+device.vendorId;
+        return deviceID;
+      }).then( devID => {
+        fetch(process.env.REACT_APP_DB_API+"/login", {
+          method: "POST", 
+          body: JSON.stringify({
+            username: Hasher(this.state.username).cipher, 
+            password: Hasher(this.state.pass).cipher
+          }), 
+          headers: {
+            'Accept': 'application/json', 
+            'Content-Type': 'application/json', 
+            'api_key': process.env.REACT_APP_DB_API_ACCESS_KEY
+          }
+        })
+        .then(res => res.json())
+        .then(resl => {
+          if(resl.succeed && (crypto.AES.decrypt(resl.usr.dhash, this.state.pass).toString(crypto.enc.Utf8) === devID)){
+            this.props.dispatch({
+              type: "ATTACH-USER", 
+              payload: resl.usr
+            })
+            this.setState({redirect:true});
+          } else {
+            alert("PLEASE CHECK ID & PASSWORD");
+          }
+        })
+      }).catch(err => {
+        if(err.message !== "No device selected."){
+          console.log(err);
+        }
+      });
     } else {
       alert("YOU CAN ALWAYS WASTE YOUR TIME!");
     }

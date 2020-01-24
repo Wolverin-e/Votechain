@@ -5,18 +5,7 @@ import { fetch_results } from "../actions/fetch_results";
 class Details extends Component {
 
 	componentDidMount(){
-		fetch(process.env.REACT_APP_DB_API+"/result", {
-			method: "GET", 
-			headers: {
-				'Accept': 'application/json', 
-				'Content-Type': 'application/json'
-			}
-		}).then( res => {
-			return res.json()
-		}).then( result => {
-			// console.log(result);
-			this.setState({votes: result});
-		})
+		this.props.dispatch(fetch_results());
 	}
 
 	render() {

@@ -37,6 +37,11 @@ const reducers = (state = default_state, action) => {
                 ...state, 
                 results: action.payload
             }
+        case "ATTACH-TKNs":
+            var new_state = state;
+            new_state.user.tkn = action.payload.tkn;
+            new_state.user.rtkn = action.payload.rtkn;
+            return new_state;
         case "ATTACH-REGISTERED-USER":
             return{
                 ...state, 

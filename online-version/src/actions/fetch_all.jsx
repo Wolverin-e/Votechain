@@ -1,15 +1,19 @@
+import store from '../store/store';
+import attach_tkn from "./attach_tkn";
 
-const fetch_all = (tkn, rtkn, _timedelay = 50) => {
+const fetch_all = (_timedelay = 50) => {
     return dispatch => {
         return fetch(process.env.REACT_APP_DB_API+'/all', {
             method: "GET", 
             headers: {
                 'api_key': process.env.REACT_APP_DB_API_ACCESS_KEY, 
-                'api_auth_key': tkn, 
-                'api_auth_refresh_key': rtkn
+                'api_auth_key': store.getState().user.tkn, 
+                'api_auth_refresh_key': store.getState().user.rtkn
             }
-        }).then(res => res.json())
-        .then(resl => {
+        }).then(res => {
+            dispatch(attach_tkn);
+            return res.json();
+        }).then(resl => {
             if(resl.length){
                 dispatch({
                     type: "ATTACH-FETCHED-ALL", 
@@ -20,7 +24,7 @@ const fetch_all = (tkn, rtkn, _timedelay = 50) => {
             }
         }).catch( err => {
             console.log("RECALLING FETCH-ALL AFTER "+_timedelay+"ms");
-            return setTimeout(() => dispatch(fetch_all(tkn, rtkn, _timedelay*2)), _timedelay);
+            return setTimeout(() => dispatch(fetch_all(_timedelay*2)), _timedelay);
         })
     }
 }
