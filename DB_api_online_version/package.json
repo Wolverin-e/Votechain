@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"All passed\" && exit 0",
-    "start-admin": "./node_modules/.bin/env-cmd -r ../.env.rc.json -e server,client nodemon admin.js",
-    "start": "./node_modules/.bin/env-cmd -r ../.env.rc.json -e server,client nodemon app.js"
+    "start-admin": "../node_modules/.bin/env-cmd -r ../.env.rc.json -e server,client ../node_modules/.bin/nodemon admin.js",
+    "start": "../node_modules/.bin/env-cmd -r ../.env.rc.json -e server,client ../node_modules/.bin/nodemon app.js"
   },
   "author": "",
   "license": "ISC",
