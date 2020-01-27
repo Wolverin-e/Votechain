@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 class Deploy extends Component {
     state = {
         deployer: "", 
-        contract_address: "CURRENT "+process.env.CONTRACT_ADDRESS
+        contract_address: "CURRENT "+process.env.REACT_APP_CONTRACT_ADDRESS
     }
 
     componentDidMount = () => {
