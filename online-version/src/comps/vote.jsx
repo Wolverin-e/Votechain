@@ -18,32 +18,40 @@ class Vote extends Component {
 
 	handleVote = () => {
 		if( (!this.props.has_voted) && this.props.user.vhash === "" ){
-			var hashed = this.props.user.aid+'---'+this.state.for
-			fetch(process.env.REACT_APP_DB_API+"/vote", {
-				method: "POST", 
-				body: JSON.stringify({vhash: Hasher(hashed).cipher}), 
-				headers: {
-					'Accept': 'application/json', 
-					'Content-Type': 'application/json', 
-					'api_key': process.env.REACT_APP_DB_API_ACCESS_KEY, 
-					'api_auth_key': this.props.user.tkn, 
-					'api_auth_refresh_key': this.props.user.rtkn
-				}
-			}).then(res => {
-				this.props.dispatch(attach_tkn(res));
-				return res.json();
-			}).then(resl => {
-				if(resl.voted){
-					this.props.dispatch(fetch_results());
-					this.props.dispatch({
-						type: "SET-VOTED"
-					})
-					alert("VOTED SUCCESSFULLY");
-				} else {
-					alert("TRY AGAIN IN SOME TIME");
-					console.log(resl.err);
-				}
-			});
+			if(! this.props.vote_requested){
+				this.props.dispatch({
+					type: "HANDLE-VOTE-REQUESTED"
+				})
+
+				var hashed = this.props.user.aid+'---'+this.state.for
+				fetch(process.env.REACT_APP_DB_API+"/vote", {
+					method: "POST", 
+					body: JSON.stringify({vhash: Hasher(hashed).cipher}), 
+					headers: {
+						'Accept': 'application/json', 
+						'Content-Type': 'application/json', 
+						'api_key': process.env.REACT_APP_DB_API_ACCESS_KEY, 
+						'api_auth_key': this.props.user.tkn, 
+						'api_auth_refresh_key': this.props.user.rtkn
+					}
+				}).then(res => {
+					this.props.dispatch(attach_tkn(res));
+					return res.json();
+				}).then(resl => {
+					if(resl.voted){
+						this.props.dispatch(fetch_results());
+						this.props.dispatch({
+							type: "SET-VOTED"
+						})
+						alert("VOTED SUCCESSFULLY");
+					} else {
+						alert("TRY AGAIN IN SOME TIME");
+						console.log(resl.err);
+					}
+				});
+			} else {
+				alert("VOTE-REQUESTED!");
+			}
 		} else {
 			alert("😏😑 You have already Voted go back to enjoying yourself!");
 		}

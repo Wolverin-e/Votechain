@@ -4,7 +4,8 @@ let default_state = {
     candidates: [], 
     about_candidates: [], 
     results: [], 
-    registered_for: false
+    registered_for: false, 
+    vote_requested: false
 }
 
 const reducers = (state = default_state, action) => {
@@ -47,6 +48,11 @@ const reducers = (state = default_state, action) => {
                 ...state, 
                 registered_for: action.payload
             }
+        case "HANDLE-VOTE-REQUESTED":
+            return {
+                ...state, 
+                vote_requested: true
+            }    
         case "HANDLE-LOGOUT":
             return {
                 ...default_state
