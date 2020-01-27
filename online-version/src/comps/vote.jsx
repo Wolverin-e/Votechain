@@ -23,6 +23,8 @@ class Vote extends Component {
 				method: "POST", 
 				body: JSON.stringify({vhash: Hasher(hashed).cipher}), 
 				headers: {
+					'Accept': 'application/json', 
+					'Content-Type': 'application/json', 
 					'api_key': process.env.REACT_APP_DB_API_ACCESS_KEY, 
 					'api_auth_key': this.props.user.tkn, 
 					'api_auth_refresh_key': this.props.user.rtkn

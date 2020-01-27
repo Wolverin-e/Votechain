@@ -42,7 +42,7 @@ var refresh_token_key = process.env.DB_API_JWT_REFRESH_KEY
 // var dict = {}
 const token_expiry_time = Number(process.env.DB_API_JWT_EXPIRY_TIME)
 const token_refresh_time = Number(process.env.DB_API_JWT_REFRESH_TIME)
-const jwt_time_scale = process.env.DB_API_JWT_REFRESH_TIME
+const jwt_time_scale = process.env.DB_API_JWT_TIME_SCALE
 const jwt_encryption_algorithm = process.env.DB_API_JWT_ENCRYPTION_ALG
 
 const get_token = id => {
@@ -100,7 +100,7 @@ app.use((req, res, next) => {
 												if( decrypt.original_token === req.headers.api_auth_key ){
 													jwt.verify(req.headers.api_auth_key, level2_auth_key, {ignoreExpiration: true}, (errrr, decrypt) => {
 														const new_tkn = get_token(decrypt.id);
-														const new_ref_tkn = get_refresh_token(new_tkn, token_expiry_time-Math.floor(((new Date())-(new Date(err.expiredAt)))/60000));
+														const new_ref_tkn = get_refresh_token(new_tkn, token_expiry_time-Math.floor(((new Date())-(new Date(err.expiredAt)))/Number(process.env.DB_API_JWT_TIME_SCALE_NUMERIC)));
 														// console.log(new_tkn, new_ref_tkn)
 														res.set({
 															"new_tkn": new_tkn, 

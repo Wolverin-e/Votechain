@@ -28,10 +28,10 @@
     "web3": "^1.2.1"
   },
   "scripts": {
-    "web-server": "cd ./online-version && npm start", 
-    "api-server": "cd ./DB_api_online_version && npm start", 
-    "admin-server": "cd ./online-version && npm start", 
-    "admin-api-server": "cd ./DB_api_online_version && npm run start-admin", 
+    "web-server": "cd ./online-version && npm start",
+    "api-server": "cd ./DB_api_online_version && npm start",
+    "admin-server": "cd ./online-admin && npm start",
+    "admin-api-server": "cd ./DB_api_online_version && npm run start-admin",
     "test": "echo \"All passed\" && exit 0"
   },
   "eslintConfig": {

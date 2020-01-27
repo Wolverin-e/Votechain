@@ -1,7 +1,7 @@
 const fetch = require('node-fetch');
 
 var DB = (query) => {
-	return fetch(process.env.REACT_APP_DB_API, {
+	return fetch(process.env.REACT_APP_ADMIN_API, {
 		method: "POST", 
 		body: JSON.stringify({qry: query}), 
 		headers: {
