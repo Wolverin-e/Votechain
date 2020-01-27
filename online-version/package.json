@@ -9,7 +9,6 @@
     "env-cmd": "^10.0.1",
     "mysql": "^2.17.1",
     "node-fetch": "^2.6.0",
-    "node-hid": "^0.7.9",
     "react": "^16.8.6",
     "react-bootstrap": "^1.0.0-beta.10",
     "react-dom": "^16.8.6",
