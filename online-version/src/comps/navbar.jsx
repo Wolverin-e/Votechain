@@ -34,7 +34,7 @@ class navbar extends Component {
     for(let i = 0; i<nav_links.length; i++){
       nav_links[i].classList.remove("shown");
     }
-    document.getElementsByClassName("hamburger")[0].classList.toggle("is-active");
+    document.getElementsByClassName("hamburger")[0].classList.remove("is-active");
   }
 
   render() {
@@ -46,11 +46,13 @@ class navbar extends Component {
             <li className="navbar-brand">
                 VOTECHAIN
             </li>
-              <button class="hamburger hamburger--emphatic" type="button" onClick={() => this.handleToggle()}>
-                <span class="hamburger-box">
-                  <span class="hamburger-inner"></span>
+            <li className="ham-burger">
+              <button className="hamburger hamburger--emphatic" type="button" onClick={() => this.handleToggle()}>
+                <span className="hamburger-box">
+                  <span className="hamburger-inner"></span>
                 </span>
               </button>
+            </li>
             <li className="nav-item active" onClick={() => this.handleClose()}>
               <Link id="homelink" to="/" className="nav-link">
                 <b>Home</b>

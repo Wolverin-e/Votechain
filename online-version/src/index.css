@@ -314,7 +314,7 @@ body {
 }
 
 .results {
-  margin-top: 40%;
+  margin-top: 30%;
   height: fit-content;
   width: 100%;
 }
@@ -354,14 +354,14 @@ body {
     max-height: 600px;
   }
 
-  .dashboard1 {
-  }
+  /* .dashboard1 {
+  } */
 
-  .dashboard2{
+  /* .dashboard2{ */
     /* max-width: 425px; */
-  }
+  /* } */
 
-  .dropdown-toggle{
+  .ham-burger{
     display: none;
   }
 }

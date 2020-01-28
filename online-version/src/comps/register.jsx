@@ -51,28 +51,9 @@ class Register extends Component {
 
 	handleSubmit = async () => {
 		if(this.checkform()){
-			const device = this.state.deviceID;
-			const pin = this.state.pin;
+			const device = await crypto.SHA512(this.state.deviceID).toString();
+			const pin = await crypto.SHA512(this.state.pin).toString();
 			await this.setState({deviceID: crypto.AES.encrypt(device, pin).toString()});
-			// eslint-disable-next-line
-			// var sql = "INSERT INTO voters (aid, name, email, number, dhash) VALUES ("+this.state.aid+", '"+this.state.name+"', '"+this.state.email+"', "+this.state.number+", '"+this.state.deviceID+"')";
-			// var validation_sql = "SELECT aid FROM voters WHERE aid="+this.state.aid;
-			// DB(validation_sql).then(res => {
-			// 	if(!res.qry_res.length) {
-			// 		DB(sql).then(resp => {
-			// 			// console.log(resp);
-			// 			this.copyToClipboard(this.state.aid);
-			// 			alert('REGISTERED!\n COPIED AAADHAR ID TO YOUR CLIPBOARD!');
-			// 			this.props.dispatch({
-			// 				type: "ATTACH-REGISTERED-USER", 
-			// 				payload: this.state.aid
-			// 			})
-			// 			document.getElementById('homelink').click();
-			// 		});
-			// 	} else {
-			// 		alert('ALREADY REGISTERED!');
-			// 	};
-			// });
 			fetch(process.env.REACT_APP_DB_API+"/register", {
 				method: "POST", 
 				body: JSON.stringify({

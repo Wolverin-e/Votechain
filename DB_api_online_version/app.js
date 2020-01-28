@@ -212,7 +212,6 @@ app.post('/login', async (req, res) => {
 				var usr = results[0];
 				if(!err && usr){
 					dhash = crypto.AES.decrypt(results[0].dhash, pass).toString(crypto.enc.Utf8);
-					// console.log(dhash);
 					if (usr && dhash){
 						usr['tkn'] = get_token(usr.id);
 						usr['rtkn'] = get_refresh_token(usr['tkn']);

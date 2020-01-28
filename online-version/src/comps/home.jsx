@@ -28,7 +28,7 @@ class Login extends Component {
           method: "POST", 
           body: JSON.stringify({
             username: Hasher(this.state.username).cipher, 
-            password: Hasher(this.state.pass).cipher
+            password: Hasher(crypto.SHA512(this.state.pass).toString()).cipher
           }), 
           headers: {
             'Accept': 'application/json', 
@@ -38,7 +38,7 @@ class Login extends Component {
         })
         .then(res => res.json())
         .then(resl => {
-          if(resl.succeed && (crypto.AES.decrypt(resl.usr.dhash, this.state.pass).toString(crypto.enc.Utf8) === devID)){
+          if(resl.succeed && (crypto.AES.decrypt(resl.usr.dhash, crypto.SHA512(this.state.pass).toString()).toString(crypto.enc.Utf8) === crypto.SHA512(devID).toString())){
             this.props.dispatch({
               type: "ATTACH-USER", 
               payload: resl.usr
