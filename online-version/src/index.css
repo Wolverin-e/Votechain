@@ -52,7 +52,7 @@ body {
 .custom-nav {
   background-color: rgba(0, 0, 0, 0.15);
   backdrop-filter: blur(30px);
-  /*box-shadow: 0px 0px 1px 0px #000;*/
+  -webkit-backdrop-filter: blur(30px);
   top: 0;
 }
 
@@ -60,6 +60,7 @@ body {
   height: 4px;
   width: 100%;
   backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
   background-color: rgba(0, 0, 0, 0.19);
 }
 
@@ -139,6 +140,7 @@ body {
   width: 10%;
   height: 70%;
   backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
   background-color: rgba(0, 0, 0, 0.2);
   border-radius: 10px 0px 0px 10px;
   transition: 400ms;
@@ -154,6 +156,7 @@ body {
   letter-spacing: 2px;
   background-color: rgba(0, 0, 0, 0.55);
   backdrop-filter: brightness(150%);
+  -webkit-backdrop-filter: brightness(150%);
 }
 
 .dashboard2 {
@@ -163,6 +166,7 @@ body {
   width: 40%;
   height: 70%;
   backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
   background-color: rgba(0, 0, 0, 0.1);
   border-radius: 0px 15px 15px 0px;
 }
@@ -280,8 +284,6 @@ body {
 }
 
 .login {
-  margin-left: 35%;
-  margin-top: 7%;
   position: absolute;
   width: 30%;
   height: 60%;
@@ -289,6 +291,7 @@ body {
   background-color: rgba(0, 0, 0, 0.15);
   /*box-shadow: 0px 0px 15px 0px #000;*/
   backdrop-filter: blur(17px);
+  -webkit-backdrop-filter: blur(17px);
 }
 
 .Register {
@@ -299,6 +302,7 @@ body {
   height: 70%;
   background-color: rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
   border-radius: 15px;
   overflow-y: scroll;
 }
@@ -334,4 +338,85 @@ body {
 
 .results-table .results-td-right {
   padding: 4% 3% 4% 20%;
+}
+
+@media (min-width: 577px){
+  .login{
+    left:50%;
+    top: 50%;
+    margin: 0;
+    transform: translate(-50%, -50%);
+    max-height: 475px;
+  }
+
+
+  .dashboard1, .dashboard2{
+    max-height: 600px;
+  }
+
+  .dashboard1 {
+  }
+
+  .dashboard2{
+    /* max-width: 425px; */
+  }
+
+  .dropdown-toggle{
+    display: none;
+  }
+}
+
+@media (max-width: 576px){
+  .login{
+    margin: 75% 0% 0% 50%;
+    width: 80%;
+    max-height: 425px;
+    transform: translate(-50%, -50%);
+  }
+
+  .Register{
+    margin-left: 10%;
+    width: 80%;
+  }
+
+  .nav-item{
+    opacity: 0;
+    height: 0rem;
+    transition: opacity 200ms, height 200ms linear;
+  }
+  
+  .navbar-nav .shown {
+    opacity: 1;
+    height: 2.5rem;
+    transition: opacity 200ms, height 200ms linear;
+  }
+
+  .navbar-brand{
+    border: 0px;
+    margin-right: 0px;
+    margin-left: 16px;
+    padding-right: 0px;
+  }
+
+  .navbar-nav {
+    position: relative;
+    left: 50%;
+    transform: translate(-50%, 0%);
+  }
+
+  .dashboard1{
+    margin-top: 10%;
+    margin-left: 5%;
+    width: 20%;
+  }
+
+  .dashboard1, .dashboard2{
+    max-height: 400px;
+  }
+
+  .dashboard2{
+    margin-top: 10%;
+    margin-left: 25%;
+    width: 70%;
+  }
 }
