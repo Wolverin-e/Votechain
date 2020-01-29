@@ -20,7 +20,9 @@ Use Node v10.18.0 and Install dependencies
     cd ./Votechain && npm install
 ##
 Use docker-compose to to start required services.
+
 Install docker from [HERE](https://docs.docker.com/install/linux/docker-ce/ubuntu/).
+
 Install docker-compose from [HERE](https://docs.docker.com/compose/install/).
 
 	cd ./DC_Services
