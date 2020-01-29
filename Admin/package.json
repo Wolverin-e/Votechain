@@ -21,10 +21,10 @@
   },
   "scripts": {
     "start": "PORT=3003 ../node_modules/.bin/env-cmd -r ../.env.rc.json -e server,client ../node_modules/.bin/react-scripts start",
-    "build": "../node_modules/.bin/react-scripts build",
+    "build": "../node_modules/.bin/env-cmd -r ../.env.rc.json -e server,client ../node_modules/.bin/react-scripts build",
     "test": "../node_modules/.bin/react-scripts test",
     "eject": "../node_modules/.bin/react-scripts eject", 
-    "server": "../node_modules/.bin/env-cmd -r ../.env.rc.json -e server,client node serve.js"
+    "production-server": "../node_modules/.bin/env-cmd -r ../.env.rc.json -e server,client node serve.js"
   },
   "eslintConfig": {
     "extends": "react-app"

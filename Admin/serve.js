@@ -21,6 +21,6 @@ app.get('/', function(req, res) {
 https.createServer({
 	key: fs.readFileSync(process.env.SSL_CERT_PATH+'srvr.key'), 
 	cert: fs.readFileSync(process.env.SSL_CERT_PATH+'srvr.cert')
-}, app).listen(Number(process.env.REACT_APP_ADMIN_API_PORT), () => {
-	console.log("Started on "+process.env.REACT_APP_ADMIN_API_PORT+" over HTTPS only!");
+}, app).listen(Number(process.env.REACT_APP_ADMIN_PORT), () => {
+	console.log("Started on "+process.env.REACT_APP_ADMIN_PORT+" over HTTPS only!");
 })
