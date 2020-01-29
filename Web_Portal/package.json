@@ -1,5 +1,5 @@
 {
-  "name": "votechain",
+  "name": "Web_Portal",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -20,9 +20,10 @@
   },
   "scripts": {
     "start": "HTTPS=true ../node_modules/.bin/env-cmd -r ../.env.rc.json -e client ../node_modules/.bin/react-scripts start",
-    "build": "../node_modules/.bin/react-scripts build",
+    "build": "../node_modules/.bin/env-cmd -r ../.env.rc.json -e client ../node_modules/.bin/react-scripts build",
     "test": "../node_modules/.bin/react-scripts test",
-    "eject": "../node_modules/.bin/react-scripts eject"
+    "eject": "../node_modules/.bin/react-scripts eject", 
+    "production-server": "../node_modules/.bin/env-cmd -r ../.env.rc.json -e client,server node serve.js"
   },
   "eslintConfig": {
     "extends": "react-app"

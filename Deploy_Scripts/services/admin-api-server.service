@@ -1,0 +1,10 @@
+[Unit]
+Description=ADMIN API SERVER FOR ADMIN WEB INTERFACE
+
+[Service]
+User=mitul
+Type=idle
+ExecStart=/bin/bash /home/mitul/Projects/Votechain/Deploy_Scripts/admin-api-server.sh
+
+[Install]
+WantedBy=multi-user.target

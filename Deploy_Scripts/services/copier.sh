@@ -1,0 +1,1 @@
+cp ./*.service /etc/systemd/system

@@ -1,0 +1,10 @@
+[Unit]
+Description=ADMIN WEB SERVER
+
+[Service]
+User=mitul
+Type=idle
+ExecStart=/bin/bash /home/mitul/Projects/Votechain/Deploy_Scripts/admin-server.sh
+
+[Install]
+WantedBy=multi-user.target

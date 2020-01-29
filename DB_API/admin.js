@@ -28,18 +28,18 @@ const con = mysql.createConnection({
 con.connect();
 
 const app = express();
+
+//////////////////////////////  CORS HEADERS
+app.use(function (req, res, next) {
+	res.setHeader('Access-Control-Allow-Origin', '*');
+	res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
+	res.setHeader('Access-Control-Allow-Headers', '*');
+	res.setHeader('Access-Control-Allow-Credentials', true);
+	next();
+});
+//////////////////////////////
+
 app.use(express.json());
-
-// var allowed_methods = ['GET', 'POST'];
-
-// app.use((req, res, next) => {
-// 	if( allowed_methods.includes(req.method) ){
-// 		console.log(req.ip)
-// 		next()
-// 	} else {
-// 		res.status(405).send("HAHA NICE TRY!");
-// 	}
-// });
 
 app.post('/add', (req, res) => {
 	var decrypted_name = cryptico.decrypt(req.body.add, key).plaintext;

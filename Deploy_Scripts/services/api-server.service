@@ -1,0 +1,10 @@
+[Unit]
+Description=API SERVER FOR CLIENTs
+
+[Service]
+User=mitul
+Type=idle
+ExecStart=/bin/bash /home/mitul/Projects/Votechain/Deploy_Scripts/api-server.sh
+
+[Install]
+WantedBy=multi-user.target

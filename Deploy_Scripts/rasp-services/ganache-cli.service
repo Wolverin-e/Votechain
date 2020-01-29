@@ -1,0 +1,10 @@
+[Unit]
+Description=Ganache-cli as a Service
+
+[Service]
+PrivateTmp=true
+Type=idle
+ExecStart=/bin/bash /home/casper/Projects/Votechain/Deploy_Scripts/ganache-exec.sh
+
+[Install]
+WantedBy=multi-user.target

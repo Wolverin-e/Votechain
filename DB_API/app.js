@@ -30,12 +30,23 @@ const con = mysql.createConnection({
 con.connect();
 
 const app = express();
+
+//////////////////////////////  CORS HEADERS
+app.use(function (req, res, next) {
+	res.setHeader('Access-Control-Allow-Origin', '*');
+	res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
+	res.setHeader('Access-Control-Allow-Headers', '*');
+	res.setHeader('Access-Control-Allow-Credentials', true);
+	next();
+});
+//////////////////////////////
+
 app.use(express.json());
 
 //////////////////////////////
-var allowed_methods = ['GET', 'POST'];
+var allowed_methods = ['GET', 'POST', 'OPTIONS'];
 var level1_auth_key = process.env.REACT_APP_DB_API_ACCESS_KEY
-var level1_security_exceptions = []
+var level1_security_exceptions = ['OPTIONS']
 var level2_auth_key = process.env.DB_API_JWT_PRIVATE_KEY
 var level2_security_exceptions = ['/all', '/login', '/register']
 var refresh_token_key = process.env.DB_API_JWT_REFRESH_KEY
@@ -65,7 +76,7 @@ const get_refresh_token = (tkn, r_time = token_expiry_time) => {
 
 app.use((req, res, next) => {
 	if( allowed_methods.includes(req.method) ){
-		if( level1_security_exceptions.includes(req.path) ){
+		if( level1_security_exceptions.includes(req.path) || level1_security_exceptions.includes(req.method)){
 			next();
 		} else if(req.headers.api_key === level1_auth_key){
 			if( level2_security_exceptions.includes(req.path) ){
@@ -133,11 +144,11 @@ app.use((req, res, next) => {
 				}
 			}
 		} else {
-			console.log("401", req.ip);
+			console.log("401 NO API_KEY", req.ip);
 			res.status(401).send("NICE TRY! 🤨🤨");
 		}
 	} else {
-		console.log("405", req.ip);
+		console.log("405", req.method, req.ip);
 		res.status(405).send("NICE TRY! 🤨🤨");
 	}
 });
@@ -195,13 +206,12 @@ app.get('/all', async (req, res) => {
 	res.send(all);
 })
 
-
-app.post('/', (req, res) => {
-	con.query(req.body.qry, (err, results, fields) => {
-		if (err) throw err;
-		res.send({qry_res: results});
-	})
-});
+// app.post('/', (req, res) => {
+// 	con.query(req.body.qry, (err, results, fields) => {
+// 		if (err) throw err;
+// 		res.send({qry_res: results});
+// 	})
+// });
 
 app.post('/login', async (req, res) => {
 	if(req.body.username && req.body.password ){
@@ -224,7 +234,7 @@ app.post('/login', async (req, res) => {
 				}
 			})
 		} else {
-
+			res.status(406).send("NICE TRY!");
 		}
 	}
 })
@@ -264,8 +274,12 @@ app.post('/register', async (req, res) => {
 // });
 
 app.use( (req, res, next) => {
-	console.log("404 replacedby 406: ", req.ip)
-	res.status(406).send("NOT ACCEPTABLE! 🤨🤨");
+	if(req.method === 'OPTIONS'){
+		res.sendStatus(204);
+	} else {
+		console.log("404 replacedby 406: ", req.ip)
+		res.status(406).send("NOT ACCEPTABLE! 🤨🤨");
+	}
 })
 
 https.createServer({
