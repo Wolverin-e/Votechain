@@ -1,0 +1,10 @@
+[Unit]
+Description=WEB SERVER CLIENT SIDE
+
+[Service]
+User=mitul
+Type=idle
+ExecStart=/bin/bash /home/mitul/Projects/Votechain/Deploy_Scripts/web-server.sh
+
+[Install]
+WantedBy=multi-user.target
