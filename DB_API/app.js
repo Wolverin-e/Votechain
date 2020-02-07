@@ -269,9 +269,6 @@ app.post('/register', async (req, res) => {
 	}
 })
 
-// app.listen(3001, () => {
-// 	console.log('Started on 3001!');
-// });
 
 app.use( (req, res, next) => {
 	if(req.method === 'OPTIONS'){
@@ -282,9 +279,13 @@ app.use( (req, res, next) => {
 	}
 })
 
-https.createServer({
-	key: fs.readFileSync(process.env.SSL_CERT_PATH+'srvr.key'), 
-	cert: fs.readFileSync(process.env.SSL_CERT_PATH+'srvr.cert')
-}, app).listen(process.env.REACT_APP_DB_API_PORT, () => {
-	console.log("Started on "+process.env.REACT_APP_DB_API_PORT+" over HTTPS only!");
-})
+app.listen(process.env.REACT_APP_DB_API_PORT, () => {
+	console.log("Started on "+process.env.REACT_APP_DB_API_PORT+" over HTTP only!");
+});
+
+// https.createServer({
+// 	key: fs.readFileSync(process.env.SSL_CERT_PATH+'privkey.pem'), 
+// 	cert: fs.readFileSync(process.env.SSL_CERT_PATH+'fullchain.pem')
+// }, app).listen(process.env.REACT_APP_DB_API_PORT, () => {
+// 	console.log("Started on "+process.env.REACT_APP_DB_API_PORT+" over HTTPS only!");
+// })

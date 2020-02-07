@@ -109,9 +109,13 @@ app.post('/', (req, res) => {
 	})
 });
 
-https.createServer({
-	key: fs.readFileSync(process.env.SSL_CERT_PATH+'srvr.key'), 
-	cert: fs.readFileSync(process.env.SSL_CERT_PATH+'srvr.cert')
-}, app).listen(process.env.REACT_APP_ADMIN_API_PORT, () => {
-	console.log("Started on "+process.env.REACT_APP_ADMIN_API_PORT+" over HTTPS only!");
-})
+app.listen(process.env.REACT_APP_ADMIN_API_PORT, () => {
+	console.log("Started on "+process.env.REACT_APP_ADMIN_API_PORT+" over HTTP only!");
+});
+
+// https.createServer({
+// 	key: fs.readFileSync(process.env.SSL_CERT_PATH+'privkey.pem'), 
+// 	cert: fs.readFileSync(process.env.SSL_CERT_PATH+'fullchain.pem')
+// }, app).listen(process.env.REACT_APP_ADMIN_API_PORT, () => {
+// 	console.log("Started on "+process.env.REACT_APP_ADMIN_API_PORT+" over HTTPS only!");
+// })

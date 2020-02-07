@@ -1,4 +1,4 @@
 cd ~/Projects/Votechain
 source ~/.zshrc
-nvm use 10.18.0
+nvm use 10.18.1
 npm run admin-api-server

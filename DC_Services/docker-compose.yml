@@ -19,8 +19,8 @@ services:
       - 8000:80
     environment:
       PMA_HOST: my-sql-server
-      PMA_USER: root
-      PMA_PASSWORD: mypass
+      # PMA_USER: root
+      # PMA_PASSWORD: mypass
       PMA_ABSOLUTE_URI: https://phpmyadmin.votechain.in
     networks:
       - my-network

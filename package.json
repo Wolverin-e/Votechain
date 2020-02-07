@@ -28,13 +28,13 @@
     "web3": "^1.2.1"
   },
   "scripts": {
-    "test": "echo \"All passed\" && exit 0", 
-    "web-server": "cd ./Web_Portal && npm start", 
-    "admin-server": "cd ./Admin && npm start", 
-    "web-production-server": "cd ./Web_Portal && npm run production-server", 
-    "admin-production-server": "cd ./Admin && npm run production-server", 
-    "api-server": "cd ./DB_API && npm start", 
-    "admin-api-server": "cd ./DB_API && npm run start-admin", 
+    "test": "echo \"All passed\" && exit 0",
+    "web-server": "cd ./Web_Portal && npm start",
+    "admin-server": "cd ./Admin && npm start",
+    "web-production-server": "cd ./Web_Portal && npm run production-server",
+    "admin-production-server": "cd ./Admin && npm run production-server",
+    "api-server": "cd ./DB_API && npm start",
+    "admin-api-server": "cd ./DB_API && npm run start-admin",
     "start-support": "cd ./DC_Services && sudo docker-compose start"
   },
   "eslintConfig": {
