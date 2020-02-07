@@ -16,18 +16,19 @@ services:
   php-my-admin:
     image: phpmyadmin/phpmyadmin
     ports:
-      - 8080:80
+      - 8000:80
     environment:
       PMA_HOST: my-sql-server
       PMA_USER: root
       PMA_PASSWORD: mypass
+      PMA_ABSOLUTE_URI: https://phpmyadmin.votechain.in
     networks:
       - my-network
     depends_on:
       - my-sql-server
 
   ganache-rpc:
-    image: trufflesuite/ganache-cli
+    image: trufflesuite/ganache-cli:v6.8.1
     ports:
       - 8545:8545
     volumes:
