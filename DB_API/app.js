@@ -21,15 +21,18 @@ const contract = new web3.eth.Contract(abi, address);
 //////////////////////////////////////
 
 
-const con = mysql.createConnection({
+var createConnection
+const con = mysql.createPool({
 	host: process.env.DB_HOST, 
 	user: process.env.DB_USER, 
 	password: process.env.DB_PASSWORD, 
 	database: process.env.DB_DATABASE_NAME
 });
-con.connect();
+
+// con.connection();
 
 const app = express();
+
 
 //////////////////////////////  CORS HEADERS
 app.use(function (req, res, next) {
