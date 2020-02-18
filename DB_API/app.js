@@ -19,9 +19,9 @@ const account = process.env.ETH_ACCOUNT;
 // const priv_key = Buffer.from(process.env.ACCOUNT_PRIVATE_KEY.slice(2), 'hex');
 const contract = new web3.eth.Contract(abi, address);
 //////////////////////////////////////
+const nodemailer = require("nodemailer");
 
 
-var createConnection
 const con = mysql.createPool({
 	host: process.env.DB_HOST, 
 	user: process.env.DB_USER, 
@@ -33,6 +33,40 @@ const con = mysql.createPool({
 
 const app = express();
 
+
+//////////////// Mailing
+
+let transporter = nodemailer.createTransport({
+	host: "smtp.gmail.com", 
+	port: 587, 
+	secure: false, 
+	auth: {
+		user: process.env.EMAIL_USER, 
+		pass: process.env.EMAIL_PASS
+	}
+})
+
+let message = {
+	from: "bot.votechain@gmail.com", 
+	to: "mitulpatel101001+serverWarning@gmail.com", 
+	subject: "Warning", 
+	text: "test!"
+}
+
+const log_mail = (text = "test!") => {
+	d = new Date();
+	message.text = text;
+	message.subject = "Warning "+d.getHours()+":"+d.getMinutes();
+	transporter.sendMail(message, (err, info) => {
+		if(err){
+			console.log("error-mailing:", err);
+		} else {
+			console.log("sent", info);
+		}
+	})
+}
+
+log_mail();
 
 //////////////////////////////  CORS HEADERS
 app.use(function (req, res, next) {
@@ -92,6 +126,7 @@ app.use((req, res, next) => {
 								case "JsonWebTokenError":
 									console.log("403", req.ip);
 									res.status(403).send("NOT AUTHORISED! 🤨🤨");
+									log_mail("level1 breach try from:\n"+req.get("X-Forwarded-For"));
 									break;
 								case "TokenExpiredError":
 									if(req.headers.api_auth_refresh_key){
@@ -101,6 +136,7 @@ app.use((req, res, next) => {
 													case "JsonWebTokenError":
 														console.log("403", req.ip);
 														res.status(403).send("NOT AUTHORISED! 🤨🤨");
+														log_mail("api-leve1-breach from:\n"+req.get("X-Forwarded-For"));
 														break;
 													case "TokenExpiredError":
 														console.log("401 revoked", req.ip);
@@ -125,12 +161,14 @@ app.use((req, res, next) => {
 												} else {
 													console.log("403", req.ip);
 													res.status(403).send("NOT AUTHORISED! 🤨🤨");
+													log_mail("api-level1-breach from:\n"+req.get("X-Forwarded-For"));
 												}
 											}
 										})
 									} else {
 										console.log("423", req.ip);
 										res.status(423).send("THIS STUFF IS MEANT FOR BIG BOYS!! 🤨🤨");
+										log_mail("level2 breach try from:\n"+req.get("X-Forwarded-For"));
 									}
 									break;
 								default:
@@ -144,15 +182,18 @@ app.use((req, res, next) => {
 				} else {
 					console.log("423", req.ip);
 					res.status(423).send("THIS STUFF IS MEANT FOR BIG BOYS!! 🤨🤨");
+					log_mail("level2-breach-try from:\n"+req.get("X-Forwarded-For"));
 				}
 			}
 		} else {
 			console.log("401 NO API_KEY", req.ip);
 			res.status(401).send("NICE TRY! 🤨🤨");
+			log_mail("level0 breach try from:\n"+req.get("X-Forwarded-For"));
 		}
 	} else {
 		console.log("405", req.method, req.ip);
 		res.status(405).send("NICE TRY! 🤨🤨");
+		log_mail("level0 attack from:\n"+req.get("X-Forwarded-For"));
 	}
 });
 
@@ -279,6 +320,7 @@ app.use( (req, res, next) => {
 	} else {
 		console.log("404 replacedby 406: ", req.ip)
 		res.status(406).send("NOT ACCEPTABLE! 🤨🤨");
+		log_mail("level0 attack from:\n"+req.get("X-Forwarded-For"));
 	}
 })
 
